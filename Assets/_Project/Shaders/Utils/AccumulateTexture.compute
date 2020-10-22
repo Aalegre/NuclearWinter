@@ -1,0 +1,48 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+//#pragma kernel CSMain
+#pragma kernel Min
+#pragma kernel Max
+#pragma kernel Clear
+#pragma kernel Passthrough
+#pragma kernel LerpTexture
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Result;
+Texture2D<float4> Input;
+float4 ColorLerp;
+float ColorLerpT;
+
+//[numthreads(8,8,1)]
+//void CSMain (uint3 id : SV_DispatchThreadID)
+//{
+//    // TODO: insert actual code here!
+//
+//    Result[id.xy] = float4(id.x & id.y, (id.x & 15)/15.0, (id.y & 15)/15.0, 0.0);
+//}
+
+[numthreads(4, 4, 1)]
+void Min(uint3 id : SV_DispatchThreadID)
+{
+    Result[id.xy] = min(Input[id.xy], Result[id.xy]);
+}
+[numthreads(4, 4, 1)]
+void Max(uint3 id : SV_DispatchThreadID)
+{
+    Result[id.xy] = max(Input[id.xy], Result[id.xy]);
+}
+[numthreads(4, 4, 1)]
+void Clear(uint3 id : SV_DispatchThreadID)
+{
+    Result[id.xy] = float4(0,0,0,0);
+}
+[numthreads(4, 4, 1)]
+void Passthrough(uint3 id : SV_DispatchThreadID)
+{
+    Result[id.xy] = Input[id.xy];
+}
+[numthreads(4, 4, 1)]
+void LerpTexture(uint3 id : SV_DispatchThreadID)
+{
+    Result[id.xy] = lerp(Result[id.xy], ColorLerp, ColorLerpT);
+}

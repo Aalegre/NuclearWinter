@@ -1,0 +1,22 @@
+﻿#pragma kernel Min
+#pragma kernel Max
+#pragma kernel Clear
+
+RWTexture2D<float4> Result;
+Texture2D<float4> Input;
+
+[numthreads(4, 4, 1)]
+void Min(uint3 id : SV_DispatchThreadID)
+{
+    Result[id.xy] = min(Input[id.xy], Result[id.xy]);
+}
+[numthreads(4, 4, 1)]
+void Max(uint3 id : SV_DispatchThreadID)
+{
+    Result[id.xy] = max(Input[id.xy], Result[id.xy]);
+}
+[numthreads(4, 4, 1)]
+void Clear(uint3 id : SV_DispatchThreadID)
+{
+    Result[id.xy] = float4(0,0,0,0);
+}

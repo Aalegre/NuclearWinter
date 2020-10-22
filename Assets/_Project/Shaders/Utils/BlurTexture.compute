@@ -1,0 +1,119 @@
+﻿#pragma kernel SimpleBlur4
+#pragma kernel SimpleBlur8
+#pragma kernel Passthrough
+
+RWTexture2D<float4> Result;
+Texture2D<float4> Input;
+SamplerState LinearSampler
+{
+
+    Filter = MIN_MAG_MIP_LINEAR;
+
+    AddressU = Clamp;
+
+    AddressV = Clamp;
+
+};
+SamplerState _LinearClamp;
+int BlurRadius;
+
+[numthreads(4, 4, 1)]
+void SimpleBlur4(uint3 id : SV_DispatchThreadID)
+{
+    float4 color;
+    color = Result[id.xy];
+
+    int2 size;
+    Result.GetDimensions(size.x, size.y);
+
+    int2 coord;
+
+    coord.x = id.x + BlurRadius;
+    coord.y = id.y;
+    coord.x = min(coord.x, size.x - 1);
+    color += Result[coord.xy];
+
+    coord.x = id.x - BlurRadius;
+    coord.y = id.y;
+    coord.x = max(coord.x, 0);
+    color += Result[coord.xy];
+
+    coord.x = id.x;
+    coord.y = id.y + BlurRadius;
+    coord.y = min(coord.y, size.y - 1);
+    color += Result[coord.xy];
+
+    coord.x = id.x;
+    coord.y = id.y - BlurRadius;
+    coord.y = max(coord.y, 0);
+    color += Result[coord.xy];
+
+    color *= 0.2;
+
+    Result[id.xy] = color;
+}
+[numthreads(4, 4, 1)]
+void SimpleBlur8(uint3 id : SV_DispatchThreadID)
+{
+    float4 color;
+    color = Result[id.xy];
+
+    int2 size;
+    Result.GetDimensions(size.x, size.y);
+
+    int2 coord;
+
+    coord.x = id.x + BlurRadius;
+    coord.y = id.y;
+    coord.x = min(coord.x, size.x);
+    color += Result[coord.xy];
+
+    coord.x = id.x - BlurRadius;
+    coord.y = id.y;
+    coord.x = max(coord.x, 0);
+    color += Result[coord.xy];
+
+    coord.x = id.x;
+    coord.y = id.y + BlurRadius;
+    coord.y = min(coord.y, size.y);
+    color += Result[coord.xy];
+
+    coord.x = id.x;
+    coord.y = id.y - BlurRadius;
+    coord.y = max(coord.y, 0);
+    color += Result[coord.xy];
+
+
+    coord.x = id.x + BlurRadius;
+    coord.y = id.y + BlurRadius;
+    coord.x = min(coord.x, size.x);
+    coord.y = min(coord.y, size.y);
+    color += Result[coord.xy];
+
+    coord.x = id.x - BlurRadius;
+    coord.y = id.y + BlurRadius;
+    coord.x = max(coord.x, 0);
+    coord.y = min(coord.y, size.y);
+    color += Result[coord.xy];
+
+    coord.x = id.x + BlurRadius;
+    coord.y = id.y - BlurRadius;
+    coord.x = min(coord.x, size.x);
+    coord.y = max(coord.y, 0);
+    color += Result[coord.xy];
+
+    coord.x = id.x - BlurRadius;
+    coord.y = id.y - BlurRadius;
+    coord.x = max(coord.x, 0);
+    coord.y = max(coord.y, 0);
+    color += Result[coord.xy];
+
+    color /= 9;
+
+    Result[id.xy] = color;
+}
+[numthreads(4, 4, 1)]
+void Passthrough(uint3 id : SV_DispatchThreadID)
+{
+    Result[id.xy] = Input[id.xy];
+}

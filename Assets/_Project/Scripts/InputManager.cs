@@ -26,8 +26,13 @@ public class InputManager : MonoBehaviour
 
 
     static public InputManager Instance;
-
+    public PlayerInput playerInput;
+    public enum SCHEME { KEYBOARD, CONTROLLER, PLAYSTATION};
+    public string[] SCHEMENAME = { "KeyboardMouse", "Controller", "PlayStation" };
+    public SCHEME currentController;
     public Axis Move;
+    public Axis Look;
+    public Axis Mouse;
     public Button Fire;
 
     private void Awake()
@@ -40,11 +45,41 @@ public class InputManager : MonoBehaviour
         else
         {
             Destroy(this);
+            return;
         }
+        if (!playerInput)
+            playerInput = GetComponent<PlayerInput>();
     }
 
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        UpdateScheme();
+        Move.ctx = context;
+        Move.axis = context.ReadValue<Vector2>();
+    }
+    public void OnLook(InputAction.CallbackContext context)
+    {
+        UpdateScheme();
+        if (currentController == SCHEME.KEYBOARD)
+        {
+            Mouse.ctx = context;
+            Mouse.axis = context.ReadValue<Vector2>();
+            Look.ctx = context;
+            Look.axis = context.ReadValue<Vector2>();
+            Look.axis -= GameManager.Instance.resolutionHalfF;
+            Look.axis /= GameManager.Instance.resolutionMinF * 0.5f;
+            if (Look.axis.magnitude > 1f)
+                Look.axis.Normalize();
+        }
+        else
+        {
+            Look.ctx = context;
+            Look.axis = context.ReadValue<Vector2>();
+        }
+    }
     public void OnFire(InputAction.CallbackContext context)
     {
+        UpdateScheme();
         Fire.ctx = context;
         Fire.waspressed = Fire.pressed;
         Fire.pressed = context.performed;
@@ -52,10 +87,21 @@ public class InputManager : MonoBehaviour
             StartCoroutine(ButtonCancelled(Fire));
     }
 
-    public void OnMove(InputAction.CallbackContext context)
+    public void UpdateScheme()
     {
-        Move.ctx = context;
-        Move.axis = context.ReadValue<Vector2>();
+        try
+        {
+            string currentScheme = playerInput.currentControlScheme;
+            for (int i = 0; i < SCHEMENAME.Length; i++)
+            {
+                if (currentScheme == SCHEMENAME[i])
+                {
+                    currentController = (SCHEME)i;
+                    return;
+                }
+            }
+        }
+        catch { }
     }
 
     IEnumerator ButtonCancelled(Button btn)

@@ -75,7 +75,18 @@ MonoBehaviour:
     m_ActionId: 293d7668-753d-4547-9eab-abc3cd01f383
     m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1805927078751140190}
+        m_MethodName: OnLook
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 633f7feb-23a6-4552-8be0-ffc6e8a45978
     m_ActionName: Player/Look[/Mouse/position]
   - m_PersistentCalls:
@@ -142,6 +153,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b8bb8ec030cad44a79b55773fad878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerController: {fileID: 0}
+  playerCharacterController: {fileID: 0}
+  cameraController: {fileID: 0}
+  deformableTerrainManager: {fileID: 0}
+  resolution: {x: 0, y: 0}
+  resolutionHalf: {x: 0, y: 0}
+  resolutionF: {x: 0, y: 0}
+  resolutionHalfF: {x: 0, y: 0}
+  resolutionMin: 0
+  resolutionMinF: 0
 --- !u!114 &1805927078751140190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,7 +175,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe5d053451f0b2a49aa7c904d18c7291, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInput: {fileID: 1805927078751140188}
+  SCHEMENAME:
+  - KeyboardMouse
+  - Gamepad
+  - PlayStation
+  currentController: 0
   Move:
+    axis: {x: 0, y: 0}
+  Look:
+    axis: {x: 0, y: 0}
+  Mouse:
     axis: {x: 0, y: 0}
   Fire:
     pressed: 0

@@ -136,6 +136,51 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: ffcf0e03-bee6-43af-86db-cf02385df3f8
     m_ActionName: UI/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1805927078751140190}
+        m_MethodName: OnInteract
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: cdbd78cf-7037-416c-84d1-2dcab0400e2a
+    m_ActionName: Player/Interact[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1805927078751140190}
+        m_MethodName: OnWeapon
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 69ca7cc6-6b6c-4d5b-be00-86b8b6279d3e
+    m_ActionName: Player/Weapon[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1805927078751140190}
+        m_MethodName: OnTorch
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a8a38af5-00dd-4244-8791-a81cafa9e915
+    m_ActionName: Player/Torch[/Keyboard/f]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -188,5 +233,14 @@ MonoBehaviour:
   Mouse:
     axis: {x: 0, y: 0}
   Fire:
+    pressed: 0
+    waspressed: 0
+  Interact:
+    pressed: 0
+    waspressed: 0
+  Weapon:
+    pressed: 0
+    waspressed: 0
+  Torch:
     pressed: 0
     waspressed: 0

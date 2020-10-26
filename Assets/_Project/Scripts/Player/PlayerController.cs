@@ -56,5 +56,18 @@ public class PlayerController : MonoBehaviour
             AimPosition = playerCharacterController.root.position + AimDirection;
         }
 
+        if (InputManager.Instance.Fire.ButtonDown() && !playerCharacterController.Gun)
+        {
+            playerCharacterController.Gun = true;
+        }
+        if (InputManager.Instance.Weapon.ButtonDown())
+        {
+            playerCharacterController.Gun = !playerCharacterController.Gun;
+        }
+        if (InputManager.Instance.Torch.ButtonDown())
+        {
+            playerCharacterController.Torch = !playerCharacterController.Torch;
+        }
+
     }
 }

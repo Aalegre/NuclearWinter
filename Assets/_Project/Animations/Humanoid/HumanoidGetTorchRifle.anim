@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HumanoidGetTorch
+  m_Name: HumanoidGetTorchRifle
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -1833,17 +1833,17 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.41666666
         value: 0.03
-        inSlope: 0.16285713
-        outSlope: 0.16285713
+        inSlope: 0.32571426
+        outSlope: 0.32571426
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0.22
-        inSlope: 0.32571426
-        outSlope: 0.32571426
+        value: 0.41
+        inSlope: 0.6514285
+        outSlope: 0.6514285
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -1879,17 +1879,17 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.41666666
         value: 0.52
-        inSlope: -1.0457143
-        outSlope: -1.0457143
+        inSlope: -0.84
+        outSlope: -0.84
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: -0.7
-        inSlope: -2.0914285
-        outSlope: -2.0914285
+        value: -0.46
+        inSlope: -1.68
+        outSlope: -1.68
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -1925,17 +1925,17 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.41666666
         value: -0.77
-        inSlope: -0.02571431
-        outSlope: -0.02571431
+        inSlope: 0.3085714
+        outSlope: 0.3085714
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: -0.8
-        inSlope: -0.05142862
-        outSlope: -0.05142862
+        value: -0.41
+        inSlope: 0.6171428
+        outSlope: 0.6171428
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -2083,17 +2083,17 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.41666666
         value: 0.28
-        inSlope: 0.49772325
-        outSlope: 0.49772325
+        inSlope: 0.61714286
+        outSlope: 0.61714286
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0.8606771
-        inSlope: 0.9954465
-        outSlope: 0.9954465
+        value: 1
+        inSlope: 1.2342857
+        outSlope: 1.2342857
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -6863,17 +6863,17 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.41666666
         value: 0.03
-        inSlope: 0.16285713
-        outSlope: 0.16285713
+        inSlope: 0.32571426
+        outSlope: 0.32571426
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0.22
-        inSlope: 0.32571426
-        outSlope: 0.32571426
+        value: 0.41
+        inSlope: 0.6514285
+        outSlope: 0.6514285
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -6909,17 +6909,17 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.41666666
         value: 0.52
-        inSlope: -1.0457143
-        outSlope: -1.0457143
+        inSlope: -0.84
+        outSlope: -0.84
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: -0.7
-        inSlope: -2.0914285
-        outSlope: -2.0914285
+        value: -0.46
+        inSlope: -1.68
+        outSlope: -1.68
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -6955,17 +6955,17 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.41666666
         value: -0.77
-        inSlope: -0.02571431
-        outSlope: -0.02571431
+        inSlope: 0.3085714
+        outSlope: 0.3085714
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: -0.8
-        inSlope: -0.05142862
-        outSlope: -0.05142862
+        value: -0.41
+        inSlope: 0.6171428
+        outSlope: 0.6171428
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -7113,17 +7113,17 @@ AnimationClip:
       - serializedVersion: 3
         time: 0.41666666
         value: 0.28
-        inSlope: 0.49772325
-        outSlope: 0.49772325
+        inSlope: 0.61714286
+        outSlope: 0.61714286
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0.8606771
-        inSlope: 0.9954465
-        outSlope: 0.9954465
+        value: 1
+        inSlope: 1.2342857
+        outSlope: 1.2342857
         tangentMode: 34
         weightedMode: 0
         inWeight: 0.33333334
@@ -9141,8 +9141,22 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
+  - time: 0
+    functionName: ToggleGunHandsTorch
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 0.41666666
     functionName: ToggleShowTorch
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1
+    functionName: ToggleGunHandsTorch
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -48,12 +48,14 @@ MonoBehaviour:
   cameraController: {fileID: 8658256778934032948}
   useCamera: 1
   playerCharacterController: {fileID: 8291262152975208206}
-  moveSpeed: 2
+  walkSpeed: 2
+  runSpeed: 0.5
   AimDirection: {x: 0, y: 0, z: 0}
   AimPosition: {x: 0, y: 0, z: 0}
   AimRadius: 10
   AimHeight: 1.5
   AimMinRadius: 0.1
+  MoveAxis: {x: 0, y: 0}
 --- !u!1 &4072316558145604087
 GameObject:
   m_ObjectHideFlags: 0

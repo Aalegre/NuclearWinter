@@ -8,12 +8,15 @@ using UnityEngine;
 public class PlayerCharacterController : ThirdPersonCharacter
 {
 	public PlayerController playerController;
+	public IkController ik;
 
 	public Transform root;
 	public Transform LeftHand;
 	public Transform RightHand;
 	public Transform RightHandTorch;
 	public Transform GunTorch;
+	public Transform GunLeftHand;
+	public Transform GunRightHand;
 
 	public Vector3 HandTargetDirection;
 	public Vector3 HandTargetPosition;
@@ -36,6 +39,8 @@ public class PlayerCharacterController : ThirdPersonCharacter
 	private void Awake()
     {
 		GameManager.Instance.playerCharacterController = this;
+		if (!ik)
+			ik = GetComponent<IkController>();
     }
 
     void Start()
@@ -48,10 +53,10 @@ public class PlayerCharacterController : ThirdPersonCharacter
 
 		m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 		m_OrigGroundCheckDistance = m_GroundCheckDistance;
-		TorchHolder.SetActive(ShowTorch);
 		TorchProp.SetActive(!ShowTorch);
-		GunHolder.SetActive(ShowGun);
+		TorchHolder.SetActive(ShowTorch);
 		GunProp.SetActive(!ShowGun);
+		GunHolder.SetActive(ShowGun);
 	}
 
 
@@ -93,12 +98,19 @@ public class PlayerCharacterController : ThirdPersonCharacter
 		if (ShowTorch != ShowTorchOld)
 		{
 			ShowTorchOld = ShowTorch;
-			TorchHolder.SetActive(ShowTorch);
 			TorchProp.SetActive(!ShowTorch);
+			TorchHolder.SetActive(ShowTorch);
 			TorchHolder.transform.parent = RightHandTorch;
+		}
+        if (ShowTorch)
+		{
 			TorchHolder.transform.localPosition = Vector3.zero;
 			TorchHolder.transform.localRotation = Quaternion.identity;
 		}
+        else
+        {
+
+        }
 
 		if (Gun != GunOld)
 		{
@@ -108,15 +120,32 @@ public class PlayerCharacterController : ThirdPersonCharacter
 		if (ShowGun != ShowGunOld)
 		{
 			ShowGunOld = ShowGun;
-			GunHolder.SetActive(ShowGun);
 			GunProp.SetActive(!ShowGun);
+			GunHolder.SetActive(ShowGun);
+            if (ShowGun)
+            {
+
+            }
+            else
+			{
+				GunProp.transform.position = GunHolder.transform.position;
+				//GunProp.transform.rotation = GunHolder.transform.rotation;
+			}
 		}
 
 
 		HandTargetDirection = Vector3.Lerp(HandTargetDirection, playerController.AimDirection, Mathf.Clamp(HandSpeed * Time.deltaTime, 0, 1));
 		HandTargetPosition = root.position + HandTargetDirection;
 		//Debug.Log(tempHand.normalized);
-		HandAim = Mathf.Lerp(HandAim, -root.transform.TransformDirection(-playerController.AimDirection.x, 0, playerController.AimDirection.z).normalized.x, Mathf.Clamp(HandSpeed * Time.deltaTime, 0, 1));
+		Vector3 direction = root.transform.TransformDirection(-playerController.AimDirection.x, 0, playerController.AimDirection.z);
+		if (direction.z < 0)
+		{
+			HandAim = Mathf.Lerp(HandAim, -direction.normalized.x * 1.5f, Mathf.Clamp(HandSpeed * Time.deltaTime, 0, 1));
+        }
+        else
+		{
+			HandAim = Mathf.Lerp(HandAim, -direction.normalized.x, Mathf.Clamp(HandSpeed * Time.deltaTime, 0, 1));
+		}
 
 		m_Animator.SetFloat("Aim", HandAim);
 
@@ -124,8 +153,74 @@ public class PlayerCharacterController : ThirdPersonCharacter
 
 	public void ToggleShowTorch()
     {
-		Debug.Log("Toggled torch");
+		Debug.Log("Toggled Torch");
 		ShowTorch = Torch;
+    }
+	public void ToggleShowGun()
+    {
+		Debug.Log("Toggled Gun");
+		ShowGun = Gun;
+    }
+	public void ToggleGunHands()
+    {
+		Debug.Log("Toggled Guns");
+		if (Gun)
+		{
+			ik.RightHandTarget = GunRightHand;
+			ik.LeftHandTarget = GunLeftHand;
+		}
+		else
+		{
+			ik.RightHandTarget = null;
+			ik.LeftHandTarget = null;
+		}
+    }
+	public void ToggleGunHandsTorch()
+    {
+		Debug.Log("Toggled Guns");
+        if (Gun)
+		{
+            if (Torch)
+			{
+				if (ShowTorch)
+				{
+					ik.RightHandTarget = GunRightHand;
+                }
+                else
+				{
+					ik.RightHandTarget = null;
+				}
+			}
+            else
+			{
+				if (ShowTorch)
+				{
+					ik.RightHandTarget = GunRightHand;
+				}
+				else
+				{
+					ik.RightHandTarget = GunRightHand;
+				}
+			}
+		}
+        else
+        {
+
+        }
+    }
+	public void ChangeTorchPos()
+    {
+        if (Gun)
+		{
+			TorchHolder.transform.parent = GunTorch;
+			TorchHolder.transform.localPosition = Vector3.zero;
+			TorchHolder.transform.localRotation = Quaternion.identity;
+		}
+        else
+		{
+			TorchHolder.transform.parent = RightHandTorch;
+		}
+
     }
 
 }

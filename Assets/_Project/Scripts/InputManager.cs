@@ -22,6 +22,23 @@ public class InputManager : MonoBehaviour
         public bool ButtonDown() { return !waspressed && pressed; }
         public bool ButtonPressed() { return pressed; }
         public bool ButtonUp() { return waspressed && !pressed; }
+        public bool Update(InputAction.CallbackContext context)
+        {
+            ctx = context;
+            if (context.started)
+            {
+                pressed = true;
+            }
+            if (context.canceled)
+            {
+                pressed = false;
+            }
+            else
+            {
+
+            }
+            return context.canceled;
+        }
     }
 
 
@@ -34,6 +51,9 @@ public class InputManager : MonoBehaviour
     public Axis Look;
     public Axis Mouse;
     public Button Fire;
+    public Button Interact;
+    public Button Weapon;
+    public Button Torch;
 
     private void Awake()
     {
@@ -50,7 +70,13 @@ public class InputManager : MonoBehaviour
         if (!playerInput)
             playerInput = GetComponent<PlayerInput>();
     }
-
+    private void LateUpdate()
+    {
+        Fire.waspressed = Fire.pressed;
+        Interact.waspressed = Interact.pressed;
+        Weapon.waspressed = Weapon.pressed;
+        Torch.waspressed = Torch.pressed;
+    }
     public void OnMove(InputAction.CallbackContext context)
     {
         UpdateScheme();
@@ -80,11 +106,26 @@ public class InputManager : MonoBehaviour
     public void OnFire(InputAction.CallbackContext context)
     {
         UpdateScheme();
-        Fire.ctx = context;
-        Fire.waspressed = Fire.pressed;
-        Fire.pressed = context.performed;
-        if (!context.performed)
+        if (Fire.Update(context)) 
             StartCoroutine(ButtonCancelled(Fire));
+    }
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        UpdateScheme();
+        if (Interact.Update(context)) 
+            StartCoroutine(ButtonCancelled(Interact));
+    }
+    public void OnWeapon(InputAction.CallbackContext context)
+    {
+        UpdateScheme();
+        if (Weapon.Update(context)) 
+            StartCoroutine(ButtonCancelled(Weapon));
+    }
+    public void OnTorch(InputAction.CallbackContext context)
+    {
+        UpdateScheme();
+        if (Torch.Update(context)) 
+            StartCoroutine(ButtonCancelled(Torch));
     }
 
     public void UpdateScheme()

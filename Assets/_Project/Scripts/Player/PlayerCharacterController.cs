@@ -10,6 +10,8 @@ public class PlayerCharacterController : ThirdPersonCharacter
 	public PlayerController playerController;
 	public IkController ik;
 
+	public Cloth cape;
+
 	public Transform root;
 	public Transform LeftHand;
 	public Transform RightHand;
@@ -34,14 +36,18 @@ public class PlayerCharacterController : ThirdPersonCharacter
 	[HideInInspector] public bool ShowGun;
 	bool ShowGunOld;
 	public GameObject GunHolder;
+	public ParticleSystem GunParticles;
+	public Transform GunBoquilla;
 	public GameObject GunProp;
+	public float windStrength = 5;
+	public float windFalloff = 2;
 
 	private void Awake()
     {
 		GameManager.Instance.playerCharacterController = this;
 		if (!ik)
 			ik = GetComponent<IkController>();
-    }
+	}
 
     void Start()
 	{
@@ -132,23 +138,47 @@ public class PlayerCharacterController : ThirdPersonCharacter
 				//GunProp.transform.rotation = GunHolder.transform.rotation;
 			}
 		}
-
-
-		HandTargetDirection = Vector3.Lerp(HandTargetDirection, playerController.AimDirection, Mathf.Clamp(HandSpeed * Time.deltaTime, 0, 1));
+		HandTargetDirection = Vector3.Lerp(HandTargetDirection, playerController.AimDirection, HandSpeed * Time.deltaTime);
 		HandTargetPosition = root.position + HandTargetDirection;
 		//Debug.Log(tempHand.normalized);
 		Vector3 direction = root.transform.TransformDirection(-playerController.AimDirection.x, 0, playerController.AimDirection.z);
-		if (direction.z < 0)
+		if (direction.z > 0)
 		{
-			HandAim = Mathf.Lerp(HandAim, -direction.normalized.x * 1.5f, Mathf.Clamp(HandSpeed * Time.deltaTime, 0, 1));
-        }
-        else
-		{
-			HandAim = Mathf.Lerp(HandAim, -direction.normalized.x, Mathf.Clamp(HandSpeed * Time.deltaTime, 0, 1));
+			HandAim = Mathf.Lerp(HandAim, -direction.normalized.x, HandSpeed * Time.deltaTime);
 		}
+		else
+		{
+			HandAim = Mathf.Lerp(HandAim, -direction.normalized.x * 1.5f, HandSpeed * Time.deltaTime);
+		}
+        if (ShowGun)
+        {
+            float t = Utils.Map(ik.currentLeftHandStrength, 0, ik.LeftHandMaxStrength, -0.1f, 1.1f);
+            Quaternion original = GunHolder.transform.rotation;
+            GunHolder.transform.localRotation = Quaternion.identity;
+            if (t > 0)
+            {
+                Quaternion identity = GunHolder.transform.rotation;
+                if (direction.z > 0)
+                    GunHolder.transform.LookAt(playerController.AimPosition);
+                Quaternion look = GunHolder.transform.rotation;
+                look = Quaternion.Lerp(original, look, Time.deltaTime * HandSpeed);
+                GunHolder.transform.rotation = Quaternion.Lerp(identity, look, t);
+            }
+        }
 
-		m_Animator.SetFloat("Aim", HandAim);
+		cape.externalAcceleration = Vector3.Lerp(cape.externalAcceleration, Vector3.zero, Time.deltaTime * windFalloff);
+		cape.randomAcceleration = Vector3.Lerp(cape.randomAcceleration, Vector3.zero, Time.deltaTime * windFalloff);
 
+        m_Animator.SetFloat("Aim", HandAim);
+
+	}
+
+	public void Shoot()
+    {
+		Debug.Log("Shoot");
+		GunParticles.Emit(50);
+		cape.externalAcceleration += GunBoquilla.forward * -windStrength;
+		cape.randomAcceleration += GunBoquilla.forward * -windStrength;
 	}
 
 	public void ToggleShowTorch()
@@ -195,10 +225,12 @@ public class PlayerCharacterController : ThirdPersonCharacter
 			{
 				if (ShowTorch)
 				{
+					//ik.RightHandTarget = null;
 					ik.RightHandTarget = GunRightHand;
 				}
 				else
 				{
+					//ik.RightHandTarget = null;
 					ik.RightHandTarget = GunRightHand;
 				}
 			}

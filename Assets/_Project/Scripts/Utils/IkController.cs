@@ -12,28 +12,31 @@ public class IkController : MonoBehaviour
     [Header("IK Head")]
     public bool LookAt = true;
     public float LookAtSpeed = 2.5f;
+    public float LookAtFadeSpeed = 2.5f;
     [Range(0f, 1f)]
     public float LookAtMaxStrength = .5f;
     public Vector3 LookAtTarget;
     Vector3 currentLookAt = Vector3.zero;
-    float currentLookAtStrength;
+    public float currentLookAtStrength;
 
     [Header("IK RightHand")]
     public bool RightHand = true;
     public float RightHandSpeed = 50;
+    public float RightHandFadeSpeed = 2.5f;
     [Range(0f, 1f)]
     public float RightHandMaxStrength = .5f;
     public Transform RightHandTarget;
     Vector3 currentRightHand = Vector3.zero;
-    float currentRightHandStrength;
+    public float currentRightHandStrength;
     [Header("IK LeftHand")]
     public bool LeftHand = true;
     public float LeftHandSpeed = 50;
+    public float LeftHandFadeSpeed = 2.5f;
     [Range(0f, 1f)]
     public float LeftHandMaxStrength = .5f;
     public Transform LeftHandTarget;
     Vector3 currentLeftHand = Vector3.zero;
-    float currentLeftHandStrength;
+    public float currentLeftHandStrength;
 
     [Header("IK Foot")]
     public bool Foot = true;
@@ -50,11 +53,11 @@ public class IkController : MonoBehaviour
     public Vector3 FinalPosOffset;
     [Tooltip("Capa de los objetos donde se puede ajustar el pie")]
     public LayerMask RayMask;
-    Vector3 lastRightFootPos;
-    Vector3 lastLeftFootPos;
-    Quaternion lastRightFootRot;
-    Quaternion lastLeftFootRot;
-    RaycastHit hit;
+    public Vector3 lastRightFootPos;
+    public Vector3 lastLeftFootPos;
+    public Quaternion lastRightFootRot;
+    public Quaternion lastLeftFootRot;
+    public RaycastHit hit;
 
     private void Awake()
     {
@@ -78,13 +81,13 @@ public class IkController : MonoBehaviour
         {
             if (LookAt)
             {
-                currentLookAtStrength = Mathf.Lerp(currentLookAtStrength, LookAtMaxStrength, Time.deltaTime);
+                currentLookAtStrength = Mathf.Lerp(currentLookAtStrength, LookAtMaxStrength, LookAtFadeSpeed * Time.deltaTime);
                 currentLookAt = Vector3.Lerp(currentLookAt, LookAtTarget, LookAtSpeed * Time.deltaTime);
                 anim.SetLookAtPosition(currentLookAt);
             }
             else
             {
-                currentLookAtStrength = Mathf.Lerp(currentLookAtStrength, 0, Time.deltaTime);
+                currentLookAtStrength = Mathf.Lerp(currentLookAtStrength, 0, LookAtFadeSpeed * Time.deltaTime);
             }
         }
         currentLookAtStrength = Mathf.Clamp(currentLookAtStrength, 0, LookAtMaxStrength);
@@ -104,12 +107,12 @@ public class IkController : MonoBehaviour
             else
             {
                 anim.SetIKPosition(AvatarIKGoal.RightHand, currentRightHand);
-                currentRightHandStrength = Mathf.Lerp(currentRightHandStrength, 0, Time.deltaTime);
+                currentRightHandStrength = Mathf.Lerp(currentRightHandStrength, 0, RightHandFadeSpeed * Time.deltaTime);
             }
 
             if (LeftHand && LeftHandTarget)
             {
-                currentLeftHandStrength = Mathf.Lerp(currentLeftHandStrength, LeftHandMaxStrength, Time.deltaTime);
+                currentLeftHandStrength = Mathf.Lerp(currentLeftHandStrength, LeftHandMaxStrength, LeftHandFadeSpeed * Time.deltaTime);
                 currentLeftHand = Vector3.Lerp(currentLeftHand, LeftHandTarget.position, LeftHandSpeed * Time.deltaTime);
                 anim.SetIKPosition(AvatarIKGoal.LeftHand, currentLeftHand);
                 anim.SetIKRotation(AvatarIKGoal.LeftHand, LeftHandTarget.rotation);
@@ -117,7 +120,7 @@ public class IkController : MonoBehaviour
             else
             {
                 anim.SetIKPosition(AvatarIKGoal.LeftHand, currentLeftHand);
-                currentLeftHandStrength = Mathf.Lerp(currentLeftHandStrength, 0, Time.deltaTime);
+                currentLeftHandStrength = Mathf.Lerp(currentLeftHandStrength, 0, LeftHandFadeSpeed * Time.deltaTime);
             }
         }
         currentRightHandStrength = Mathf.Clamp(currentRightHandStrength, 0, RightHandMaxStrength);

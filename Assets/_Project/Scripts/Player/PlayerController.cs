@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     [Range(0, 10)] public float TemperatureFall = 1;
     public float TemperatureMaxBase = 36;
     public float TemperatureMinBase = -5;
+    [Range(0, 5)] public float ShootDelay = 0.5f;
+    float ShootTimer = 0;
     private void Awake()
     {
         GameManager.Instance.playerController = this;
@@ -61,13 +63,25 @@ public class PlayerController : MonoBehaviour
         playerCharacterController.Move(move, false, false);
         if (InputManager.Instance.Look.axis.magnitude > AimMinRadius)
         {
-            AimDirection = new Vector3(InputManager.Instance.Look.axis.x, AimHeight, InputManager.Instance.Look.axis.y) * AimRadius;
+            AimDirection = new Vector3(InputManager.Instance.Look.axis.x, 0, InputManager.Instance.Look.axis.y) * AimRadius;
+            AimDirection.y = AimHeight;
             AimPosition = playerCharacterController.root.position + AimDirection;
         }
-
-        if (InputManager.Instance.Fire.ButtonDown() && !playerCharacterController.Gun)
+        if (playerCharacterController.Gun)
         {
-            playerCharacterController.Gun = true;
+            ShootTimer += Time.deltaTime;
+            if (playerCharacterController.ShowGun)
+            {
+                if (InputManager.Instance.Fire.ButtonDown() && ShootTimer >= ShootDelay)
+                {
+                    playerCharacterController.Shoot();
+                    ShootTimer = 0;
+                }
+            }
+        }
+        else
+        {
+            ShootTimer = ShootDelay;
         }
         if (InputManager.Instance.Weapon.ButtonDown())
         {

@@ -42,11 +42,11 @@ public class CameraController : MonoBehaviour
     {
         moveAxis = Vector2.Lerp(moveAxis, pc.MoveAxis, Time.deltaTime * moveSpeed);
         Vector3 desiredDirection = gameplayDirection;
-        desiredDirection = Vector3.Lerp(desiredDirection, gameplayDirectionUp, Mathf.Clamp(moveAxis.y, 0, 1));
-        desiredDirection = Vector3.Lerp(desiredDirection, gameplayDirectionDown, Mathf.Clamp(-moveAxis.y, 0, 1));
-        desiredDirection = Vector3.Lerp(desiredDirection, gameplayDirectionRight, Mathf.Clamp(moveAxis.x, 0, 1));
-        desiredDirection = Vector3.Lerp(desiredDirection, gameplayDirectionLeft, Mathf.Clamp(-moveAxis.x, 0, 1));
-        cam.transform.position = Vector3.Lerp(cam.transform.position, pcc.transform.position + gameplayOffset, Mathf.Clamp(Time.deltaTime * PosSpeed, 0, 1));
+        desiredDirection = Vector3.Lerp(desiredDirection, gameplayDirectionUp, moveAxis.y);
+        desiredDirection = Vector3.Lerp(desiredDirection, gameplayDirectionDown, -moveAxis.y);
+        desiredDirection = Vector3.Lerp(desiredDirection, gameplayDirectionRight, moveAxis.x);
+        desiredDirection = Vector3.Lerp(desiredDirection, gameplayDirectionLeft, -moveAxis.x);
+        cam.transform.position = Vector3.Lerp(cam.transform.position, pcc.transform.position + gameplayOffset, Time.deltaTime * PosSpeed);
         cam.transform.localRotation = Quaternion.Euler(desiredDirection);
     }
 

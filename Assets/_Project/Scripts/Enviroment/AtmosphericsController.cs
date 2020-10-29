@@ -162,9 +162,9 @@ public class AtmosphericsController : MonoBehaviour
             if (rainNext < evaluateTime)
             {
                 rainNext = (evaluateTime + Random.Range(rainNextProbability.x, rainNextProbability.y)) % 24f;
-                rainFade = Mathf.Clamp(Random.Range(rainProbability.x, rainProbability.y), 0, 1);
+                rainFade = Mathf.Clamp(Random.Range(rainProbability.x, rainProbability.y), -1, 2);
             }
-            Rain = Mathf.Lerp(Rain, rainFade, Time.deltaTime * rainFadeSpeed);
+            Rain = Mathf.Clamp(Mathf.Lerp(Rain, rainFade, Time.deltaTime * rainFadeSpeed), 0, 1);
         }
         rainParticlesEmission.rateOverTime = Mathf.Lerp(0, rainParticleEmission, Rain);
 
@@ -173,9 +173,9 @@ public class AtmosphericsController : MonoBehaviour
             if (fogNext < evaluateTime)
             {
                 fogNext = (evaluateTime + Random.Range(fogNextProbability.x, fogNextProbability.y)) % 24f;
-                fogFade = Mathf.Clamp(Random.Range(fogProbability.x, fogProbability.y), 0, 1);
+                fogFade = Mathf.Clamp(Random.Range(fogProbability.x, fogProbability.y), -1, 2);
             }
-            Fog = Mathf.Lerp(Fog, fogFade, Time.deltaTime * fogFadeSpeed);
+            Fog = Mathf.Clamp(Mathf.Lerp(Fog, fogFade, Time.deltaTime * fogFadeSpeed), 0, 1);
         }
     }
 

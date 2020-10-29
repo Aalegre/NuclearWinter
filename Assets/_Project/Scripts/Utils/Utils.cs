@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public static class Utils
 {
@@ -19,4 +22,37 @@ public static class Utils
     {
         return min + (input - inputMin) * (max - min) / (inputMax - inputMin);
     }
+
+    public static Transform FindNearest(in Vector3 pos, in IEnumerable<Transform> objects)
+    {
+        Transform bestTarget = null;
+        float closestDistanceSqr = Mathf.Infinity;
+        foreach (var obj in objects)
+        {
+            Vector3 directionToTarget = obj.position - pos;
+            float dSqrToTarget = directionToTarget.sqrMagnitude;
+            if (dSqrToTarget < closestDistanceSqr)
+            {
+                closestDistanceSqr = dSqrToTarget;
+                bestTarget = obj;
+            }
+        }
+        return bestTarget;
+    }
+    //public static GameObject FindNearest(in Vector3 pos, in IEnumerable<GameObject> objects)
+    //{
+    //    GameObject bestTarget = null;
+    //    float closestDistanceSqr = Mathf.Infinity;
+    //    foreach (var obj in objects)
+    //    {
+    //        Vector3 directionToTarget = obj.transform.position - pos;
+    //        float dSqrToTarget = directionToTarget.sqrMagnitude;
+    //        if (dSqrToTarget < closestDistanceSqr)
+    //        {
+    //            closestDistanceSqr = dSqrToTarget;
+    //            bestTarget = obj;
+    //        }
+    //    }
+    //    return bestTarget;
+    //}
 }

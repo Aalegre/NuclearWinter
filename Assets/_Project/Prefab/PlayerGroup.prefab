@@ -517,14 +517,23 @@ MonoBehaviour:
   cameraController: {fileID: 8658256778934032948}
   useCamera: 1
   playerCharacterController: {fileID: 8291262152975208206}
+  atmosphericsController: {fileID: 0}
   walkSpeed: 2
   runSpeed: 0.5
   AimDirection: {x: 0, y: 0, z: 0}
   AimPosition: {x: 0, y: 0, z: 0}
-  AimRadius: 10
+  AimRadius: 5
   AimHeight: 1.5
   AimMinRadius: 0.1
   MoveAxis: {x: 0, y: 0}
+  Life: 1
+  LifeDivisions: 3
+  Temperature: 10
+  TemperatureRise: 4
+  TemperatureFall: 1
+  TemperatureMaxBase: 36
+  TemperatureMinBase: -5
+  ShootDelay: 0.5
 --- !u!1 &4072316558145604087
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,170 +861,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4072316558081942288}
     m_Modifications:
-    - target: {fileID: 2422751739404217557, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: 0.167
-      objectReference: {fileID: 0}
-    - target: {fileID: 2591466986112893005, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: 0.27686998
-      objectReference: {fileID: 0}
-    - target: {fileID: 2591466986112893005, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.y
-      value: -0.000000024754105
-      objectReference: {fileID: 0}
-    - target: {fileID: 2591466986112893005, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.z
-      value: -0.000000005587935
-      objectReference: {fileID: 0}
-    - target: {fileID: 2741488807418343362, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: 0.00006489415
-      objectReference: {fileID: 0}
-    - target: {fileID: 2741488807418343362, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.z
-      value: -0.0057858936
-      objectReference: {fileID: 0}
-    - target: {fileID: 2842661762457199031, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: -0.029
-      objectReference: {fileID: 0}
-    - target: {fileID: 2842661762457199031, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.z
-      value: -0.235
-      objectReference: {fileID: 0}
-    - target: {fileID: 2849035526983852095, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: 0.00000010070602
-      objectReference: {fileID: 0}
-    - target: {fileID: 2849035526983852095, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.z
-      value: 0.014115
-      objectReference: {fileID: 0}
-    - target: {fileID: 3405732245400879404, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: -0.18463302
-      objectReference: {fileID: 0}
-    - target: {fileID: 3405732245400879404, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.z
-      value: -0.068789996
-      objectReference: {fileID: 0}
-    - target: {fileID: 4522836849722372665, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: -0.09633798
-      objectReference: {fileID: 0}
-    - target: {fileID: 4522836849722372665, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.z
-      value: -8.600657e-10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999255118917477752, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_Positions.Array.data[0].x
-      value: -0.14441817
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999255118917477752, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_Positions.Array.data[0].z
-      value: -0.13837543
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999255118917477752, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_Positions.Array.data[1].x
-      value: -0.18544212
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999255118917477752, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_Positions.Array.data[1].z
-      value: 0.07590312
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999255118917477752, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_Positions.Array.data[2].x
-      value: 0.17980695
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999255118917477752, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_Positions.Array.data[2].z
-      value: 0.17111015
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999255118917477752, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_Positions.Array.data[3].x
-      value: 0.056789223
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999255118917477752, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_Positions.Array.data[3].z
-      value: -0.24383979
-      objectReference: {fileID: 0}
     - target: {fileID: 5445903815261471670, guid: 8c33924d01de3c04987697ba376f7117,
         type: 3}
       propertyPath: playerController
       value: 
       objectReference: {fileID: 4072316558081942289}
-    - target: {fileID: 6857911966996756037, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: 0.00006490632
-      objectReference: {fileID: 0}
-    - target: {fileID: 6857911966996756037, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.z
-      value: -0.00574203
-      objectReference: {fileID: 0}
-    - target: {fileID: 7416648622874667163, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: -0.27687
-      objectReference: {fileID: 0}
-    - target: {fileID: 7416648622874667163, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.y
-      value: -0.0000000786227
-      objectReference: {fileID: 0}
-    - target: {fileID: 7416648622874667163, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.z
-      value: 8.136034e-15
-      objectReference: {fileID: 0}
-    - target: {fileID: 7543076252237936202, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: 0.184633
-      objectReference: {fileID: 0}
-    - target: {fileID: 7543076252237936202, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.z
-      value: -0.06879
-      objectReference: {fileID: 0}
     - target: {fileID: 8179644078127380901, guid: 8c33924d01de3c04987697ba376f7117,
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 8502595288601856018, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: 0.096338004
-      objectReference: {fileID: 0}
-    - target: {fileID: 8502595288601856018, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.z
-      value: 9.568092e-10
       objectReference: {fileID: 0}
     - target: {fileID: 8847390045902512927, guid: 8c33924d01de3c04987697ba376f7117,
         type: 3}
@@ -1071,11 +925,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9174761190952833815, guid: 8c33924d01de3c04987697ba376f7117,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: 1.3875966e-13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c33924d01de3c04987697ba376f7117, type: 3}

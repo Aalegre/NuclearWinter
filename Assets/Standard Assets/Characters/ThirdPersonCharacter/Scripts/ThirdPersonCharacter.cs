@@ -17,7 +17,7 @@ public class ThirdPersonCharacter : MonoBehaviour
 	[SerializeField] protected float m_GroundCheckDistance = 0.3f;
 	[SerializeField] protected LayerMask PhysCheck;
 
-	protected Rigidbody m_Rigidbody;
+	public Rigidbody m_Rigidbody;
 	protected Animator m_Animator;
 	protected bool m_IsGrounded;
 	protected float m_OrigGroundCheckDistance;

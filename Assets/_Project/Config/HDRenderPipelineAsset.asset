@@ -179,7 +179,7 @@ MonoBehaviour:
     materialQuality: 0
   m_RenderingPathDefaultRealtimeReflectionFrameSettings:
     bitDatas:
-      data1: 69622750778125
+      data1: 69339026817029
       data2: 4539628424389459968
     lodBias: 1
     lodBiasMode: 0
@@ -206,53 +206,53 @@ MonoBehaviour:
     lightLayerName6: Light Layer 6
     lightLayerName7: Light Layer 7
     supportDistortion: 1
-    supportTransparentBackface: 1
-    supportTransparentDepthPrepass: 1
-    supportTransparentDepthPostpass: 1
+    supportTransparentBackface: 0
+    supportTransparentDepthPrepass: 0
+    supportTransparentDepthPostpass: 0
     colorBufferFormat: 74
-    supportCustomPass: 1
+    supportCustomPass: 0
     customBufferFormat: 12
-    supportedLitShaderMode: 2
+    supportedLitShaderMode: 1
     supportDecals: 1
     msaaSampleCount: 1
     supportMotionVectors: 1
-    supportRuntimeDebugDisplay: 1
-    supportDitheringCrossFade: 1
+    supportRuntimeDebugDisplay: 0
+    supportDitheringCrossFade: 0
     supportTerrainHole: 0
     supportRayTracing: 0
     lightLoopSettings:
-      cookieAtlasSize: 512
+      cookieAtlasSize: 4096
       cookieFormat: 74
       pointCookieSize: 128
       cubeCookieTexArraySize: 16
       cookieAtlasLastValidMip: 0
       cookieTexArraySize: 16
-      planarReflectionAtlasSize: 4096
-      reflectionProbeCacheSize: 64
-      reflectionCubemapSize: 256
+      planarReflectionAtlasSize: 64
+      reflectionProbeCacheSize: 1
+      reflectionCubemapSize: 128
       reflectionCacheCompressed: 0
       planarReflectionCacheCompressed: 0
-      skyReflectionSize: 256
+      skyReflectionSize: 128
       skyLightingOverrideLayerMask:
         serializedVersion: 2
         m_Bits: 0
       supportFabricConvolution: 0
-      maxDirectionalLightsOnScreen: 16
-      maxPunctualLightsOnScreen: 512
-      maxAreaLightsOnScreen: 64
-      maxEnvLightsOnScreen: 64
+      maxDirectionalLightsOnScreen: 2
+      maxPunctualLightsOnScreen: 4
+      maxAreaLightsOnScreen: 1
+      maxEnvLightsOnScreen: 8
       maxDecalsOnScreen: 512
-      maxPlanarReflectionOnScreen: 16
+      maxPlanarReflectionOnScreen: 0
     hdShadowInitParams:
-      maxShadowRequests: 128
+      maxShadowRequests: 16
       directionalShadowsDepthBits: 16
       shadowFilteringQuality: 1
       punctualLightShadowAtlas:
-        shadowAtlasResolution: 4096
+        shadowAtlasResolution: 512
         shadowAtlasDepthBits: 16
         useDynamicViewportRescale: 1
       areaLightShadowAtlas:
-        shadowAtlasResolution: 4096
+        shadowAtlasResolution: 128
         shadowAtlasDepthBits: 16
         useDynamicViewportRescale: 1
       shadowResolutionDirectional:
@@ -270,9 +270,9 @@ MonoBehaviour:
       maxDirectionalShadowMapResolution: 2048
       maxPunctualShadowMapResolution: 2048
       maxAreaShadowMapResolution: 2048
-      supportScreenSpaceShadows: 0
-      maxScreenSpaceShadowSlots: 4
-      screenSpaceShadowBufferFormat: 48
+      supportScreenSpaceShadows: 1
+      maxScreenSpaceShadowSlots: 16
+      screenSpaceShadowBufferFormat: 8
     decalSettings:
       drawDistance: 1000
       atlasWidth: 4096
@@ -317,7 +317,7 @@ MonoBehaviour:
       ChromaticAberrationMaxSamples: 03000000060000000c000000
     lightSettings:
       useContactShadow:
-        m_Values: 000101
+        m_Values: 010101
         m_SchemaId:
           m_Id: 
     maximumLODLevel:

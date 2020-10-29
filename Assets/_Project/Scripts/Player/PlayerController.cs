@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public CameraController cameraController;
     public bool useCamera = true;
     public PlayerCharacterController playerCharacterController;
+    public AtmosphericsController atmosphericsController;
     public float walkSpeed = 2;
     public float runSpeed = .5f;
     public Vector3 AimDirection;
@@ -16,6 +17,14 @@ public class PlayerController : MonoBehaviour
     [Range(0,.5f)]
     public float AimMinRadius = .1f;
     public Vector2 MoveAxis;
+    [Header("Stats")]
+    [Range(0, 1)] public float Life = 1;
+    [Range(1, 10)] public ushort LifeDivisions = 3;
+    public float Temperature = 10;
+    [Range(0, 10)] public float TemperatureRise = 4;
+    [Range(0, 10)] public float TemperatureFall = 1;
+    public float TemperatureMaxBase = 36;
+    public float TemperatureMinBase = -5;
     private void Awake()
     {
         GameManager.Instance.playerController = this;

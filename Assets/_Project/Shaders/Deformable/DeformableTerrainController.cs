@@ -6,6 +6,7 @@ public class DeformableTerrainController : MonoBehaviour
 {
     public DeformableTerrainManager manager;
     public int priorityIndex = 0;
+    public bool EnableUpdate = true;
     [Range(0, 30)]
     [Tooltip("Lower means higher priority")]
     public int priority = 0;
@@ -17,6 +18,8 @@ public class DeformableTerrainController : MonoBehaviour
     int computeKernelPassthrough;
     int computeKernelLerp;
     public LayerMask renderMask;
+    [Range(0,.25f)]
+    public float SnowAccum = .25f;
     public Vector3 dir = new Vector3(-90, 0, 0);
     public Vector2 OffsetDepth = new Vector2(0, .5f);
     public Vector2 MeshScale = new Vector2(5, 5);
@@ -46,6 +49,7 @@ public class DeformableTerrainController : MonoBehaviour
     public string depthTexName = "_Deformable_Main";
     public string depthResName = "_Deformable_Main_Res";
     public string depthHeightName = "_Deformable_Main_Height";
+    float updateAccum;
 
     public void Awake()
     {
@@ -143,10 +147,12 @@ public class DeformableTerrainController : MonoBehaviour
         computeKernelLerp = computeAccumulate.FindKernel("LerpTexture");
         rtex = new RenderTexture(CameraResolutionMult.x * CameraResolutionBase, CameraResolutionMult.y * CameraResolutionBase, 16, RenderTextureFormat.Depth);
         rtex.wrapMode = TextureWrapMode.Repeat;
+        rtex.autoGenerateMips = false;
+        //rtex.enableRandomWrite = true;
         rtex.Create();
         tex = new RenderTexture(CameraResolutionMult.x * CameraResolutionBase, CameraResolutionMult.y * CameraResolutionBase, 0, RenderTextureFormat.ARGBHalf);
         tex.wrapMode = TextureWrapMode.Repeat;
-        tex.autoGenerateMips = true;
+        tex.autoGenerateMips = false;
         tex.enableRandomWrite = true;
         tex.Create();
         ttex = new Texture2D(CameraResolutionMult.x * CameraResolutionBase, CameraResolutionMult.y * CameraResolutionBase, TextureFormat.ARGB32, false);
@@ -165,63 +171,87 @@ public class DeformableTerrainController : MonoBehaviour
         rend.material.SetTexture(depthTexName, tex);
         rend.material.SetFloat(depthHeightName, OffsetDepth.y);
         rend.material.SetVector(depthResName, new Vector4(CameraResolutionMult.x * CameraResolutionBase, CameraResolutionMult.y * CameraResolutionBase, 0, 0));
+        computeAccumulate.SetVector("ColorLerp", new Vector4(0,0,0,0));
         UpdateTexture();
     }
 
     private void Update()
     {
-        if (lastpriority == priority)
+        try { updateAccum += Time.deltaTime * GameManager.Instance.atmosphericsController.Rain * SnowAccum; } catch { }
+        if (EnableUpdate)
         {
+            if (lastpriority == priority)
+            {
 
-        }
-        else
-        {
-            lastpriority = priority;
+            }
+            else
+            {
+                lastpriority = priority;
+                if (priority <= 0)
+                {
+                    cam.enabled = true;
+                }
+                else
+                {
+                    cam.enabled = false;
+                }
+            }
             if (priority <= 0)
             {
-                cam.enabled = true;
-            }
-            else
-            {
-                cam.enabled = false;
-            }
-        }
-        if (priority <= 0)
-        {
-            computeAccumulate.SetTexture(computeKernelMax, "Input", rtex);
-            computeAccumulate.SetTexture(computeKernelMax, "Result", tex);
-            computeAccumulate.Dispatch(computeKernelMax, CameraResolutionMult.x, CameraResolutionMult.y, 1);
-            if (Time.frameCount % 4 != priorityIndex % 4)
-            {
-
-            }
-            else
-            {
-                UpdateTexture();
-            }
-        }
-        else
-        {
-            if(Time.frameCount % priority != priorityIndex % priority)
-            {
-
-            }
-            else
-            {
-                cam.Render();
                 computeAccumulate.SetTexture(computeKernelMax, "Input", rtex);
                 computeAccumulate.SetTexture(computeKernelMax, "Result", tex);
                 computeAccumulate.Dispatch(computeKernelMax, CameraResolutionMult.x, CameraResolutionMult.y, 1);
-            }
-            if (Time.frameCount % (priority * 4) != (priorityIndex + 1) % (priority * 4))
-            {
-                //Debug.Log("ko:" + Time.frameCount % priority * 4 + ":" + priorityIndex + 1 % priority * 4);
+                if(updateAccum > 0f)
+                {
+                    computeAccumulate.SetTexture(computeKernelLerp, "Result", tex);
+                    computeAccumulate.SetFloat("ColorLerpT", updateAccum);
+                    computeAccumulate.Dispatch(computeKernelLerp, CameraResolutionMult.x, CameraResolutionMult.y, 1);
+                    updateAccum = 0;
+                }
+                if (Time.frameCount % 4 != priorityIndex % 4)
+                {
+
+                }
+                else
+                {
+                    UpdateTexture();
+                }
             }
             else
             {
-                //Debug.Log("UpdatedTexture");
-                UpdateTexture();
+                if (Time.frameCount % priority != priorityIndex % priority)
+                {
+
+                }
+                else
+                {
+                    cam.Render();
+                    computeAccumulate.SetTexture(computeKernelMax, "Input", rtex);
+                    computeAccumulate.SetTexture(computeKernelMax, "Result", tex);
+                    computeAccumulate.Dispatch(computeKernelMax, CameraResolutionMult.x, CameraResolutionMult.y, 1);
+                    if (updateAccum > 0f)
+                    {
+                        computeAccumulate.SetTexture(computeKernelLerp, "Result", tex);
+                        computeAccumulate.SetFloat("ColorLerpT", updateAccum);
+                        computeAccumulate.Dispatch(computeKernelLerp, CameraResolutionMult.x, CameraResolutionMult.y, 1);
+                        updateAccum = 0;
+                    }
+                }
+                if (Time.frameCount % (priority * 4) != (priorityIndex + 1) % (priority * 4))
+                {
+                    //Debug.Log("ko:" + Time.frameCount % priority * 4 + ":" + priorityIndex + 1 % priority * 4);
+                }
+                else
+                {
+                    //Debug.Log("UpdatedTexture");
+                    UpdateTexture();
+                }
             }
+        }
+        else
+        {
+            priority = 60;
+            cam.enabled = false;
         }
     }
 
@@ -241,8 +271,8 @@ public class DeformableTerrainController : MonoBehaviour
         Vector2 relativePos = TransformPos - PlanePos;
         if (generated)
         {
-            Vector2 relativePosScaled = relativePos / MeshScale;
-            if (relativePosScaled.x > 0.5f || relativePosScaled.y > 0.5f || relativePosScaled.x < -0.5f || relativePosScaled.y < -0.5f)
+            Vector2 relativePosScaled = relativePos / (MeshScale);
+            if (relativePosScaled.x > 1f || relativePosScaled.y > 1f || relativePosScaled.x < -1f || relativePosScaled.y < -1f)
             {
                 return new System.Tuple<Color, Vector2>(Color.clear, relativePosScaled);
             }
@@ -254,6 +284,38 @@ public class DeformableTerrainController : MonoBehaviour
         else
         {
             return new System.Tuple<Color, Vector2>(Color.clear, relativePos);
+        }
+    }
+
+    public float RelativeDistance(Transform pos)
+    {
+        Vector2 PlanePos = new Vector2(transform.position.x, transform.position.z);
+        Vector2 TransformPos = new Vector2(pos.position.x, pos.position.z);
+        Vector2 relativePos = TransformPos - PlanePos;
+        if (generated)
+        {
+            Vector2 relativePosScaled = relativePos / (MeshScale);
+            if (relativePosScaled.x > 1f || relativePosScaled.y > 1f || relativePosScaled.x < -1f || relativePosScaled.y < -1f)
+            {
+                relativePosScaled.x = Mathf.Abs(relativePosScaled.x);
+                relativePosScaled.y = Mathf.Abs(relativePosScaled.y);
+                if (relativePosScaled.x < 1f || relativePosScaled.y < 1f)
+                {
+                    return Mathf.Max(relativePosScaled.x - .5f, relativePosScaled.y - .5f);
+                }
+                else
+                {
+                    return Mathf.Min(relativePosScaled.x - .5f, relativePosScaled.y - .5f);
+                }
+            }
+            else
+            {
+                return 0f;
+            }
+        }
+        else
+        {
+            return 10000f;
         }
     }
 

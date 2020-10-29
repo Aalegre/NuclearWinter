@@ -7,6 +7,10 @@ public class CameraController : MonoBehaviour
 {
     public PlayerController pc;
     public PlayerCharacterController pcc;
+    public AudioListener audioListener;
+    public Vector3 audioListenerOffset;
+    public ReflectionProbe reflections;
+    public Vector3 reflectionsOffset;
     public float PosSpeed = 7.5f;
     public Vector3 gameplayOffset;
     public Vector3 gameplayDirection;
@@ -27,6 +31,11 @@ public class CameraController : MonoBehaviour
         UpdateResolution();
         cam.transform.position = pcc.transform.position + gameplayOffset;
         cam.transform.localRotation = Quaternion.Euler(gameplayDirection);
+    }
+    private void Update()
+    {
+        reflections.transform.position = cam.transform.position + reflectionsOffset;
+        audioListener.transform.position = pcc.transform.position + audioListenerOffset;
     }
 
     void LateUpdate()

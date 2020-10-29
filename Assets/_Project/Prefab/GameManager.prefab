@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1805927078751140188}
   - component: {fileID: 1805927078751140189}
   - component: {fileID: 1805927078751140190}
+  - component: {fileID: 4928122865601058101}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -202,6 +203,7 @@ MonoBehaviour:
   playerCharacterController: {fileID: 0}
   cameraController: {fileID: 0}
   deformableTerrainManager: {fileID: 0}
+  atmosphericsController: {fileID: 0}
   resolution: {x: 0, y: 0}
   resolutionHalf: {x: 0, y: 0}
   resolutionF: {x: 0, y: 0}
@@ -244,3 +246,19 @@ MonoBehaviour:
   Torch:
     pressed: 0
     waspressed: 0
+--- !u!114 &4928122865601058101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805927078751140191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f909e9e8c79257f4ab42f64987119fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrains: []
+  cameraController: {fileID: 0}
+  playerCharacterController: {fileID: 0}
+  BasePriority: 0

@@ -28,7 +28,7 @@ ModelImporter:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
     resampleCurves: 1
-    optimizeGameObjects: 0
+    optimizeGameObjects: 1
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -43,7 +43,35 @@ ModelImporter:
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
-    extraExposedTransformPaths: []
+    extraExposedTransformPaths:
+    - Geo
+    - Geo/Cape
+    - Geo/Soldier_body
+    - Geo/Soldier_hat
+    - Geo/Soldier_head
+    - Geo/Soldier_holster
+    - swat:Hips
+    - swat:Hips/swat:LeftUpLeg
+    - swat:Hips/swat:LeftUpLeg/swat:LeftLeg
+    - swat:Hips/swat:LeftUpLeg/swat:LeftLeg/swat:LeftFoot
+    - swat:Hips/swat:RightUpLeg
+    - swat:Hips/swat:RightUpLeg/swat:RightLeg
+    - swat:Hips/swat:RightUpLeg/swat:RightLeg/swat:RightFoot
+    - swat:Hips/swat:Spine
+    - swat:Hips/swat:Spine/swat:Spine1
+    - swat:Hips/swat:Spine/swat:Spine1/swat:Spine2
+    - swat:Hips/swat:Spine/swat:Spine1/swat:Spine2/swat:LeftShoulder
+    - swat:Hips/swat:Spine/swat:Spine1/swat:Spine2/swat:LeftShoulder/swat:LeftArm
+    - swat:Hips/swat:Spine/swat:Spine1/swat:Spine2/swat:LeftShoulder/swat:LeftArm/swat:LeftForeArm
+    - swat:Hips/swat:Spine/swat:Spine1/swat:Spine2/swat:LeftShoulder/swat:LeftArm/swat:LeftForeArm/swat:LeftHand
+    - swat:Hips/swat:Spine/swat:Spine1/swat:Spine2/swat:Neck
+    - swat:Hips/swat:Spine/swat:Spine1/swat:Spine2/swat:Neck/swat:Neck1
+    - swat:Hips/swat:Spine/swat:Spine1/swat:Spine2/swat:Neck/swat:Neck1/swat:Head
+    - swat:Hips/swat:Spine/swat:Spine1/swat:Spine2/swat:Neck/swat:Neck1/swat:Head/swat:HeadTop_End
+    - swat:Hips/swat:Spine/swat:Spine1/swat:Spine2/swat:RightShoulder
+    - swat:Hips/swat:Spine/swat:Spine1/swat:Spine2/swat:RightShoulder/swat:RightArm
+    - swat:Hips/swat:Spine/swat:Spine1/swat:Spine2/swat:RightShoulder/swat:RightArm/swat:RightForeArm
+    - swat:Hips/swat:Spine/swat:Spine1/swat:Spine2/swat:RightShoulder/swat:RightArm/swat:RightForeArm/swat:RightHand
     extraUserProperties: []
     clipAnimations: []
     isReadable: 0

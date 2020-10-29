@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public PlayerCharacterController playerCharacterController;
     public CameraController cameraController;
     public DeformableTerrainManager deformableTerrainManager;
+    public AtmosphericsController atmosphericsController;
     public Vector2Int resolution;
     public Vector2Int resolutionHalf;
     public Vector2 resolutionF;

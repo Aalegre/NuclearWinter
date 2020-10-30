@@ -23,13 +23,13 @@ public static class Utils
         return min + (input - inputMin) * (max - min) / (inputMax - inputMin);
     }
 
-    public static Transform FindNearest(in Vector3 pos, in IEnumerable<Transform> objects)
+    public static Component FindNearest(in Vector3 pos, in IEnumerable<Component> objects)
     {
-        Transform bestTarget = null;
+        Component bestTarget = null;
         float closestDistanceSqr = Mathf.Infinity;
         foreach (var obj in objects)
         {
-            Vector3 directionToTarget = obj.position - pos;
+            Vector3 directionToTarget = obj.transform.position - pos;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
             if (dSqrToTarget < closestDistanceSqr)
             {
@@ -38,6 +38,20 @@ public static class Utils
             }
         }
         return bestTarget;
+    }
+    public static List<Component> FindInRange(in Vector3 pos, float radius, in IEnumerable<Component> objects)
+    {
+        List<Component> inRange = new List<Component>();
+        radius *= radius;
+        foreach (var obj in objects)
+        {
+            Vector3 directionToTarget = obj.transform.position - pos;
+            if (directionToTarget.sqrMagnitude < radius)
+            {
+                inRange.Add(obj);
+            }
+        }
+        return inRange;
     }
     //public static GameObject FindNearest(in Vector3 pos, in IEnumerable<GameObject> objects)
     //{

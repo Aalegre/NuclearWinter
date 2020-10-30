@@ -260,7 +260,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: -5
+      value: -10
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -269,7 +269,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 12
-      value: 5
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -278,7 +278,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 24
-      value: -5
+      value: -10
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -288,10 +288,13 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  TemperatureRain: -5
+  TemperatureFog: -3
   Temperature: 0
   day: 0
-  SunSet: 18
-  SunRise: 6
+  SunSet: 19
+  SunRise: 5
+  modifiers: []
   Sun: {fileID: 605932073301346091}
   SunData: {fileID: 605932073301346092}
   SunTimeOffset: 18
@@ -301,20 +304,38 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 15
-      tangentMode: 0
+      inSlope: 26
+      outSlope: 26
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 5
+      value: 130
+      inSlope: 16.571428
+      outSlope: 16.571428
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 19
+      value: 230
+      inSlope: 16.571428
+      outSlope: 16.571428
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 24
       value: 360
-      inSlope: 15
-      outSlope: 0
-      tangentMode: 0
+      inSlope: 26
+      outSlope: 26
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -332,16 +353,7 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 5.9
-      value: -0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 6
+      time: 5
       value: 5000
       inSlope: 0
       outSlope: 0
@@ -359,17 +371,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 18
+      time: 19
       value: 5000
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 18.1
-      value: -0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -503,7 +506,7 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 6
+      time: 7
       value: 250
       inSlope: 0
       outSlope: 0
@@ -512,7 +515,7 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 6.1
+      time: 7.1
       value: 0
       inSlope: 0
       outSlope: 0
@@ -521,7 +524,7 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 17.9
+      time: 16.9
       value: 0
       inSlope: 0
       outSlope: 0
@@ -530,7 +533,7 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 18
+      time: 17
       value: 250
       inSlope: 0
       outSlope: 0
@@ -598,8 +601,8 @@ MonoBehaviour:
   rainFadeSpeed: 0.1
   rainParticles: {fileID: 5228230659796550746}
   rainParticleEmission: 2500
-  Fog: 0
   UpdateFog: 1
+  Fog: 0
   fogNextProbability: {x: 1, y: 3}
   fogProbability: {x: -3, y: 2}
   fogFadeSpeed: 0.1

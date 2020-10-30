@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
 public class AtmosphericsController : MonoBehaviour
@@ -12,10 +13,13 @@ public class AtmosphericsController : MonoBehaviour
     public const float MILLISECONDSDIVISOR = 1f / 60f / 60f / 1000f;
     public float TimeSpeed = 60;
     public AnimationCurve TemperatureOverTime = AnimationCurve.EaseInOut(0, 0, 24, 0);
+    public float TemperatureRain = -5;
+    public float TemperatureFog = -3;
     public float Temperature;
     public bool day;
     public float SunSet = 18;
     public float SunRise = 6;
+    public List<TemperatureModifierController> modifiers = new List<TemperatureModifierController>();
     [Header("Sun")]
     public Light Sun;
     public HDAdditionalLightData SunData;
@@ -69,8 +73,8 @@ public class AtmosphericsController : MonoBehaviour
     public ParticleSystem rainParticles;
     public ParticleSystem.EmissionModule rainParticlesEmission;
     public float rainParticleEmission = 1000;
-    [Range(0, 1)] public float Fog;
     public bool UpdateFog = true;
+    [Range(0, 1)] public float Fog;
     public Vector2 fogNextProbability = new Vector2(1, 3);
     public Vector2 fogProbability = new Vector2(-1, 3);
     float fogNext = -100;
@@ -124,7 +128,7 @@ public class AtmosphericsController : MonoBehaviour
         for (int i = 0; i < colors.Length; i++)
         {
             float gray = Utils.Map(colors[i].a, minVal, maxVal, 0, 1);
-            Debug.Log(gray + " : " + colors[i].a);
+            //Debug.Log(gray + " : " + colors[i].a);
             colors[i] = new Color(gray, gray, gray, gray);
         }
         noise.SetPixels(colors);
@@ -137,6 +141,7 @@ public class AtmosphericsController : MonoBehaviour
     {
         UpdateTime();
         UpdateWeather();
+        UpdateTemperature();
         UpdateEnviroment();
     }
     void UpdateTime()
@@ -164,7 +169,7 @@ public class AtmosphericsController : MonoBehaviour
                 rainNext = (evaluateTime + Random.Range(rainNextProbability.x, rainNextProbability.y)) % 24f;
                 rainFade = Mathf.Clamp(Random.Range(rainProbability.x, rainProbability.y), -1, 2);
             }
-            Rain = Mathf.Clamp(Mathf.Lerp(Rain, rainFade, Time.deltaTime * rainFadeSpeed), 0, 1);
+            Rain = Mathf.Clamp01(Mathf.Lerp(Rain, rainFade, Time.deltaTime * rainFadeSpeed));
         }
         rainParticlesEmission.rateOverTime = Mathf.Lerp(0, rainParticleEmission, Rain);
 
@@ -175,13 +180,12 @@ public class AtmosphericsController : MonoBehaviour
                 fogNext = (evaluateTime + Random.Range(fogNextProbability.x, fogNextProbability.y)) % 24f;
                 fogFade = Mathf.Clamp(Random.Range(fogProbability.x, fogProbability.y), -1, 2);
             }
-            Fog = Mathf.Clamp(Mathf.Lerp(Fog, fogFade, Time.deltaTime * fogFadeSpeed), 0, 1);
+            Fog = Mathf.Clamp01(Mathf.Lerp(Fog, fogFade, Time.deltaTime * fogFadeSpeed));
         }
     }
-
     public void UpdateTemperature()
     {
-        Temperature = TemperatureOverTime.Evaluate(evaluateTime);
+        Temperature = TemperatureOverTime.Evaluate(evaluateTime) + Mathf.Lerp(0, TemperatureRain, Rain) + Mathf.Lerp(0,TemperatureFog, Fog);
     }
     public void UpdateEnviroment()
     {
@@ -211,5 +215,15 @@ public class AtmosphericsController : MonoBehaviour
         try { densityVolume.transform.position = GameManager.Instance.playerCharacterController.transform.position + volumeOffset; } catch { }
         densityVolume.parameters.distanceFadeEnd = Mathf.Lerp(Mathf.Lerp(FogDistanceFree, FogDistanceRain, Rain), FogDistanceFog, Fog);
         try { rainParticles.transform.position = GameManager.Instance.cameraController.cam.transform.position + GameManager.Instance.playerCharacterController.m_Rigidbody.velocity * 2; } catch { }
+    }
+
+    public float GetTemperature(Vector3 pos)
+    {
+        float BaseTemperature = Temperature;
+        foreach (var modifier in modifiers)
+        {
+            try { if(modifier.active && modifier.gameObject.activeInHierarchy) BaseTemperature += modifier.GetTemperature(pos); } catch { }
+        }
+        return BaseTemperature;
     }
 }

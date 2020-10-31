@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c0bf7bba3da81042ae59cd8b7582a4d, type: 3}
+  m_Name: InventoryDemo
+  m_EditorClassIdentifier: 
+  Bullets: 0
+  BulletsMax: 32
+  Textiles: 0
+  TextilesMax: 16
+  Bottles: 0
+  BottlesMax: 4
+  Woods: 0
+  WoodsMax: 4
+  Bandaids: 0
+  BandaidsMax: 4
+  Water: 0
+  WaterMax: 5
+  Alcohol: 0
+  AlcoholMax: 2
+  Gas: 0
+  GasMax: 2
+  lampGas: 0
+  lampGasMax: 1

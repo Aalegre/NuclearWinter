@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     public CameraController cameraController;
     public UiController uiController;
+    public InventoryController inventoryController;
     public bool useCamera = true;
     public PlayerCharacterController playerCharacterController;
     public AtmosphericsController atmosphericsController;

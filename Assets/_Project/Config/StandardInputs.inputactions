@@ -52,6 +52,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "ee4e3407-40d9-442b-b698-af8b7212094a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -245,7 +253,7 @@
                 {
                     "name": "",
                     "id": "733cc335-e35b-4620-91ae-794cf3aee6cd",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -256,7 +264,7 @@
                 {
                     "name": "",
                     "id": "0f6f33aa-cb4d-4048-8307-a6992051e261",
-                    "path": "<DualShockGamepad>/buttonWest",
+                    "path": "<DualShockGamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "PlayStation",
@@ -278,7 +286,7 @@
                 {
                     "name": "",
                     "id": "1babda73-4653-429b-af35-89e48fd50e95",
-                    "path": "<Gamepad>/buttonNorth",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -289,7 +297,7 @@
                 {
                     "name": "",
                     "id": "703f8a0e-47ac-4483-b97b-b08fc03b1fef",
-                    "path": "<DualShockGamepad>/buttonNorth",
+                    "path": "<DualShockGamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "PlayStation",
@@ -338,6 +346,39 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Torch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cbf14c57-6e33-43a1-aa97-a71ba81e42d8",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9193afc6-707c-4b17-8553-bb3627d989b3",
+                    "path": "<DualShockGamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PlayStation",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2dcd2d07-db48-4379-bb3e-3cdda582c91f",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse;Gamepad",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

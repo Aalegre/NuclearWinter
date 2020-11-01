@@ -7311,8 +7311,8 @@ MonoBehaviour:
   Temperature: 5
   TemperatureMax: 0
   TemperatureRadius: 2
-  TemperatureDecayActive: 10
-  TemperatureDecayNotActive: 1
+  TemperatureDecayActive: 50
+  TemperatureDecayNotActive: 5
   TemperatureInner: 0
   TemperatureDistribution:
     serializedVersion: 2
@@ -10083,6 +10083,9 @@ MonoBehaviour:
   ShowTorch: 0
   TorchHolder: {fileID: 2198716269856463446}
   TorchProp: {fileID: 3009022972484071339}
+  TorchLighted: 1
+  TorchLight: {fileID: 1609271986799037090}
+  TorchTemperature: {fileID: 4968472503294696081}
   Gun: 0
   ShowGun: 0
   GunHolder: {fileID: 1362183675342170680}

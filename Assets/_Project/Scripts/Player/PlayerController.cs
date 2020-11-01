@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     public float TemperatureDamage = 0;
     [Range(0, 5)] public float ShootDelay = 0.5f;
     float ShootTimer = 0;
+    [Range(0, .1f)] public float TorchDecay = 0.05f;
     private void Awake()
     {
         GameManager.Instance.playerController = this;
@@ -97,10 +98,11 @@ public class PlayerController : MonoBehaviour
             ShootTimer += Time.deltaTime;
             if (playerCharacterController.ShowGun)
             {
-                if (InputManager.Instance.Fire.ButtonDown() && ShootTimer >= ShootDelay)
+                if (InputManager.Instance.Fire.ButtonDown() && ShootTimer >= ShootDelay && inventoryController.inventory.Bullets > 0)
                 {
                     playerCharacterController.Shoot();
                     ShootTimer = 0;
+                    inventoryController.inventory.Bullets--;
                 }
             }
         }
@@ -185,5 +187,17 @@ public class PlayerController : MonoBehaviour
                 Life = div;
         }
         Life = Mathf.Clamp(Life, 0, LifeDivisions);
+        if (playerCharacterController.Torch)
+        {
+            inventoryController.inventory.lampGas -= Time.deltaTime * TorchDecay;
+            if(inventoryController.inventory.lampGas <= 0)
+            {
+                playerCharacterController.TorchLighted = false;
+            }
+            else
+            {
+                playerCharacterController.TorchLighted = true;
+            }
+        }
     }
 }

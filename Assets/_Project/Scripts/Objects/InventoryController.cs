@@ -8,12 +8,36 @@ public class InventoryController : MonoBehaviour
     public Inventory inventory;
     public Inventory savedinventory;
     public List<Interactable> interactables = new List<Interactable>();
+    public Interactable closestInteractable;
+    public float closestInteractableMinRadius = 1;
     // Start is called before the first frame update
     void Awake()
     {
         inventory = Instantiate(savedinventory);
     }
-
+    private void Update()
+    {
+        closestInteractable = Utils.FindNearest(playerController.playerCharacterController.transform.position, interactables) as Interactable;
+        if(closestInteractable != null && Vector3.Distance(playerController.playerCharacterController.transform.position, closestInteractable.transform.position) <= closestInteractableMinRadius)
+        {
+            playerController.uiController.Interact = true;
+            playerController.uiController.InteractPos = closestInteractable.transform.position;
+            if (InputManager.Instance.Interact.ButtonDown())
+            {
+                closestInteractable.Interact();
+                if (closestInteractable.pickupObject)
+                {
+                    Pickup(closestInteractable.pickupObject);
+                }
+                if (closestInteractable.destroyOnInteract)
+                    Destroy(closestInteractable);
+            }
+        }
+        else
+        {
+            playerController.uiController.Interact = false;
+        }
+    }
     public void Pickup(in PickupObject pickup)
     {
         switch (pickup.Type)

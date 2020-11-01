@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c0bf7bba3da81042ae59cd8b7582a4d, type: 3}
   m_Name: InventoryDemo
   m_EditorClassIdentifier: 
-  Bullets: 0
+  Bullets: 16
   BulletsMax: 32
   Textiles: 0
   TextilesMax: 16
@@ -22,11 +22,13 @@ MonoBehaviour:
   WoodsMax: 4
   Bandaids: 0
   BandaidsMax: 4
+  Camps: 0
+  CampsMax: 1
   Water: 0
   WaterMax: 5
   Alcohol: 0
   AlcoholMax: 2
-  Gas: 0
-  GasMax: 2
-  lampGas: 0
+  Oil: 0
+  OilMax: 2
+  lampGas: 0.5
   lampGasMax: 1

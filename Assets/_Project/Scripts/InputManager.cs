@@ -54,6 +54,7 @@ public class InputManager : MonoBehaviour
     public Button Interact;
     public Button Weapon;
     public Button Torch;
+    public Button Pause;
 
     private void Awake()
     {
@@ -76,6 +77,27 @@ public class InputManager : MonoBehaviour
         Interact.waspressed = Interact.pressed;
         Weapon.waspressed = Weapon.pressed;
         Torch.waspressed = Torch.pressed;
+    }
+    public IEnumerator Feedback_Coroutine(float LowFrequencyPower, float LowFrequencyStart, float LowFrequencyEnd, float HighFrequencyPower, float HighFrequencyStart, float HighFrequencyEnd)
+    {
+        if (currentController == SCHEME.KEYBOARD)
+            yield break;
+        float lowWait = -LowFrequencyStart;
+        float highWait = -HighFrequencyStart;
+        float lowPower = 0;
+        float highPower = 0;
+        while(lowWait < LowFrequencyEnd || highWait < HighFrequencyEnd)
+        {
+            lowWait += Time.deltaTime;
+            highWait += Time.deltaTime;
+            if (lowWait >= 0)
+                lowPower = Mathf.Lerp(1, 0, lowWait / LowFrequencyEnd);
+            if (highWait >= 0)
+                highPower = Mathf.Lerp(1, 0, highWait / HighFrequencyEnd);
+            Gamepad.current.SetMotorSpeeds(lowPower, highPower);
+            yield return null;
+        }
+        Gamepad.current.SetMotorSpeeds(0, 0);
     }
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -126,6 +148,12 @@ public class InputManager : MonoBehaviour
         UpdateScheme();
         if (Torch.Update(context)) 
             StartCoroutine(ButtonCancelled(Torch));
+    }
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        UpdateScheme();
+        if (Pause.Update(context)) 
+            StartCoroutine(ButtonCancelled(Pause));
     }
 
     public void UpdateScheme()

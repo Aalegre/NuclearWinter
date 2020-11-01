@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.HighDefinition;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
@@ -31,6 +32,11 @@ public class PlayerCharacterController : ThirdPersonCharacter
 	bool ShowTorchOld;
 	public GameObject TorchHolder;
 	public GameObject TorchProp;
+	public bool TorchLighted = true;
+	public Light TorchLight;
+	HDAdditionalLightData TorchLightData;
+	float TorchIntensityOriginal;
+	public TemperatureModifierController TorchTemperature;
 	public bool Gun;
 	bool GunOld;
 	[HideInInspector] public bool ShowGun;
@@ -63,6 +69,8 @@ public class PlayerCharacterController : ThirdPersonCharacter
 		TorchHolder.SetActive(ShowTorch);
 		GunProp.SetActive(!ShowGun);
 		GunHolder.SetActive(ShowGun);
+		TorchLightData = TorchLight.GetComponent<HDAdditionalLightData>();
+		TorchIntensityOriginal = TorchLightData.intensity;
 	}
 
 
@@ -112,6 +120,17 @@ public class PlayerCharacterController : ThirdPersonCharacter
 		{
 			TorchHolder.transform.localPosition = Vector3.zero;
 			TorchHolder.transform.localRotation = Quaternion.identity;
+			TorchTemperature.active = TorchLighted;
+            if (TorchLighted)
+            {
+				TorchLightData.intensity += Time.deltaTime * TorchTemperature.TemperatureDecayActive * 100;
+				TorchLightData.intensity = Mathf.Clamp(TorchLightData.intensity, 0, TorchIntensityOriginal);
+			}
+            else
+			{
+				TorchLightData.intensity -= Time.deltaTime * TorchTemperature.TemperatureDecayNotActive * 100;
+				TorchLightData.intensity = Mathf.Clamp(TorchLightData.intensity, 0, TorchIntensityOriginal);
+			}
 		}
         else
         {
@@ -175,25 +194,29 @@ public class PlayerCharacterController : ThirdPersonCharacter
 
 	public void Shoot()
     {
-		Debug.Log("Shoot");
+		//Debug.Log("Shoot");
 		GunParticles.Emit(50);
 		cape.externalAcceleration += GunBoquilla.forward * -windStrength;
 		cape.randomAcceleration += GunBoquilla.forward * -windStrength;
+		StartCoroutine(InputManager.Instance.Feedback_Coroutine(1, 0, .4f, 1, 0, .5f));
 	}
 
 	public void ToggleShowTorch()
     {
-		Debug.Log("Toggled Torch");
+		//Debug.Log("Toggled Torch");
 		ShowTorch = Torch;
-    }
+		StartCoroutine(InputManager.Instance.Feedback_Coroutine(.5f, 0, .2f, 0, 0, 0));
+	}
 	public void ToggleShowGun()
     {
-		Debug.Log("Toggled Gun");
+		//Debug.Log("Toggled Gun");
+		if (Gun)
+			StartCoroutine(InputManager.Instance.Feedback_Coroutine(.5f, .5f, .2f, .5f, 0, 1));
 		ShowGun = Gun;
-    }
+	}
 	public void ToggleGunHands()
     {
-		Debug.Log("Toggled Guns");
+		//Debug.Log("Toggled Guns");
 		if (Gun)
 		{
 			ik.RightHandTarget = GunRightHand;
@@ -207,7 +230,7 @@ public class PlayerCharacterController : ThirdPersonCharacter
     }
 	public void ToggleGunHandsTorch()
     {
-		Debug.Log("Toggled Guns");
+		//Debug.Log("Toggled Guns");
         if (Gun)
 		{
             if (Torch)
@@ -247,6 +270,7 @@ public class PlayerCharacterController : ThirdPersonCharacter
 			TorchHolder.transform.parent = GunTorch;
 			TorchHolder.transform.localPosition = Vector3.zero;
 			TorchHolder.transform.localRotation = Quaternion.identity;
+			StartCoroutine(InputManager.Instance.Feedback_Coroutine(.5f, 0, .2f, 0, 0, 0));
 		}
         else
 		{

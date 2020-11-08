@@ -598,6 +598,7 @@ MonoBehaviour:
   Rain: 0
   rainNextProbability: {x: 1, y: 3}
   rainProbability: {x: -2, y: 2}
+  rainNext: -100
   rainFadeSpeed: 0.1
   rainParticles: {fileID: 5228230659796550746}
   rainParticleEmission: 2500
@@ -605,6 +606,7 @@ MonoBehaviour:
   Fog: 0
   fogNextProbability: {x: 1, y: 3}
   fogProbability: {x: -3, y: 2}
+  fogNext: -100
   fogFadeSpeed: 0.1
 --- !u!1 &1148068109915726432
 GameObject:
@@ -920,9 +922,9 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     startSize:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0.01
-      minScalar: 1
+      minMaxState: 3
+      scalar: 0.025
+      minScalar: 0.005
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -973,7 +975,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeY:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -1026,7 +1028,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeZ:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:

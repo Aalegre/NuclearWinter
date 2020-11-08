@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class UiController : MonoBehaviour
 {
@@ -10,9 +11,28 @@ public class UiController : MonoBehaviour
     public Canvas canvas;
     [HideInInspector] public RectTransform canvasRect;
     public CanvasGroup Fade;
-    [Header("Pause")]
-    public bool Paused;
+    [Header("Options")]
     public CanvasGroup Pause;
+    public TMP_Dropdown Resolution;
+    public TMP_InputField TimeSpeed;
+    public Toggle Rain;
+    public Slider RainValue;
+    public Toggle Fog;
+    public Slider FogValue;
+    Resolution[] resolutions;
+    public TMP_Dropdown Quality;
+    [Header("Inventory")]
+    public TextMeshProUGUI Bullets;
+    public TextMeshProUGUI Textiles;
+    public TextMeshProUGUI Bottles;
+    public TextMeshProUGUI Woods;
+    public TextMeshProUGUI Bandaids;
+    public TextMeshProUGUI Camps;
+    public TextMeshProUGUI Food;
+    public TextMeshProUGUI Water;
+    public TextMeshProUGUI Alcohol;
+    public TextMeshProUGUI Oil;
+    public TextMeshProUGUI Lamp;
     [Header("Hud")]
     public CanvasGroup HUD;
     public TextMeshProUGUI TimeHours;
@@ -24,7 +44,7 @@ public class UiController : MonoBehaviour
     public Slider Hunger;
     public Slider[] Life;
     public Image Torch;
-    public GameObject[] Bullets;
+    public GameObject[] BulletsCounter;
     int lastBullets;
     public GameObject[] Prompts_PS;
     public GameObject[] Prompts_XB;
@@ -38,8 +58,8 @@ public class UiController : MonoBehaviour
     int LastLifeDivisions;
     private void Awake()
     {
-        StartCoroutine(FadeOut(Fade, 0, 2));
-        StartCoroutine(FadeIn(HUD, 4, 1));
+        StartCoroutine(FadeOut(Fade, 2, 0));
+        StartCoroutine(FadeIn(HUD, 2, 3));
         LastLifeDivisions = playerController.LifeDivisions;
         UpdateLifeDivisions();
         Interact_CG.alpha = 0;
@@ -47,9 +67,32 @@ public class UiController : MonoBehaviour
         if (!canvas)
             canvas = GetComponent<Canvas>();
         canvasRect = canvas.GetComponent<RectTransform>();
+
+
         Pause.blocksRaycasts = false;
         Pause.interactable = false;
         Pause.alpha = 0;
+
+        Quality.ClearOptions();
+        Quality.AddOptions(QualitySettings.names.ToList());
+        Quality.value = QualitySettings.GetQualityLevel();
+        Quality.onValueChanged.AddListener(delegate { UpdateQuality(); });
+        UpdateQuality();
+
+
+        Application.targetFrameRate = 300;
+        resolutions = Screen.resolutions;
+        Resolution.ClearOptions();
+        int selected = 0;
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            if(resolutions[i].height == GameManager.Instance.resolution.y && resolutions[i].width == GameManager.Instance.resolution.x)
+                selected = i;
+            Resolution.AddOptions(new List<string>() { resolutions[i].width + "x" + resolutions[i].height + " (" + resolutions[i].refreshRate + ")" });
+        }
+        Resolution.value = selected;
+        Resolution.onValueChanged.AddListener(delegate { UpdateResolution(); });
+        UpdateResolution();
     }
 
     private void Update()
@@ -57,6 +100,7 @@ public class UiController : MonoBehaviour
         if (lastScheme != InputManager.Instance.currentController) PromptsUpdate(InputManager.Instance.currentController);
         GlobalStats();
         LocalStats();
+        PauseUpdate();
     }
     private void LateUpdate()
     {
@@ -65,18 +109,69 @@ public class UiController : MonoBehaviour
 
     public void PauseUpdate()
     {
-        if (Paused)
+        if (GameManager.Instance.Paused)
         {
             Pause.blocksRaycasts = true;
             Pause.interactable = true;
             Pause.alpha += Time.deltaTime * 10;
+            if (InputManager.Instance.Cancel.ButtonDown())
+            {
+                GameManager.Instance.Paused = false;
+                InputManager.Instance.ChangeMap(InputManager.MAP.Player);
+            }
+            OptionsUpdate();
+            InventoryUpdate();
         }
         else
         {
             Pause.blocksRaycasts = false;
             Pause.interactable = false;
-            Pause.alpha += Time.deltaTime * 10;
+            Pause.alpha -= Time.deltaTime * 10;
         }
+    }
+    public void OptionsUpdate()
+    {
+        int newTime = 60;
+        int.TryParse(TimeSpeed.text, out newTime);
+        GameManager.Instance.atmosphericsController.TimeSpeed = newTime;
+        if (Rain.isOn)
+        {
+            RainValue.interactable = false;
+            GameManager.Instance.atmosphericsController.UpdateRain = true;
+            RainValue.value = GameManager.Instance.atmosphericsController.Rain;
+        }
+        else
+        {
+            RainValue.interactable = true;
+            GameManager.Instance.atmosphericsController.UpdateRain = false;
+            GameManager.Instance.atmosphericsController.Rain = RainValue.value;
+        }
+        if (Fog.isOn)
+        {
+            FogValue.interactable = false;
+            GameManager.Instance.atmosphericsController.UpdateFog = true;
+            FogValue.value = GameManager.Instance.atmosphericsController.Fog;
+        }
+        else
+        {
+            FogValue.interactable = true;
+            GameManager.Instance.atmosphericsController.UpdateFog = false;
+            GameManager.Instance.atmosphericsController.Fog = FogValue.value;
+        }
+    }
+    public void InventoryUpdate()
+    {
+        Bullets.text = playerController.inventoryController.inventory.Bullets + "/" + playerController.inventoryController.inventory.BulletsMax;
+        Textiles.text = playerController.inventoryController.inventory.Textiles + "/" + playerController.inventoryController.inventory.TextilesMax;
+        Bottles.text = playerController.inventoryController.inventory.Bottles + "/" + playerController.inventoryController.inventory.BottlesMax;
+        Woods.text = playerController.inventoryController.inventory.Woods + "/" + playerController.inventoryController.inventory.WoodsMax;
+        Bandaids.text = playerController.inventoryController.inventory.Bandaids + "/" + playerController.inventoryController.inventory.BandaidsMax;
+        Camps.text = playerController.inventoryController.inventory.Camps + "/" + playerController.inventoryController.inventory.CampsMax;
+        Food.text = playerController.inventoryController.inventory.Food.ToString("0.0") + "/" + playerController.inventoryController.inventory.FoodMax.ToString("0");
+        Water.text = playerController.inventoryController.inventory.Water.ToString("0.0") + "/" + playerController.inventoryController.inventory.WaterMax.ToString("0");
+        Alcohol.text = playerController.inventoryController.inventory.Alcohol.ToString("0.0") + "/" + playerController.inventoryController.inventory.AlcoholMax.ToString("0");
+        Oil.text = playerController.inventoryController.inventory.Oil.ToString("0.0") + "/" + playerController.inventoryController.inventory.OilMax.ToString("0");
+        Lamp.text = playerController.inventoryController.inventory.lampGas.ToString("0.0") + "/" + playerController.inventoryController.inventory.lampGasMax.ToString("0");
     }
     public void PromptsUpdate(InputManager.SCHEME scheme)
     {
@@ -138,12 +233,12 @@ public class UiController : MonoBehaviour
     void UpdateBullets()
     {
         lastBullets = playerController.inventoryController.inventory.Bullets;
-        for (int i = 0; i < Bullets.Length; i++)
+        for (int i = 0; i < BulletsCounter.Length; i++)
         {
             if (i >= lastBullets)
-                Bullets[i].SetActive(false);
+                BulletsCounter[i].SetActive(false);
             else
-                Bullets[i].SetActive(true);
+                BulletsCounter[i].SetActive(true);
         }
     }
     void UpdateLifeDivisions()
@@ -178,6 +273,29 @@ public class UiController : MonoBehaviour
             }
         }
     }
+
+
+    public void UpdateResolution()
+    {
+        int selected = Resolution.value;
+        Screen.SetResolution(resolutions[selected].width, resolutions[selected].height, true);
+        Application.targetFrameRate = resolutions[selected].refreshRate;
+        playerController.cameraController.UpdateResolution();
+    }
+    public void UpdateQuality()
+    {
+        QualitySettings.SetQualityLevel(Quality.value, true);
+        if(QualitySettings.GetQualityLevel() <= 0)
+        {
+            playerController.cameraController.reflections.gameObject.SetActive(false);
+        }
+        else
+        {
+            playerController.cameraController.reflections.gameObject.SetActive(true);
+        }
+    }
+
+
     public IEnumerator FadeOut(CanvasGroup group, float fadeTime = 2, float waitTime = 0)
     {
         float count = waitTime;

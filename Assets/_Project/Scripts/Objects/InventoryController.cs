@@ -30,7 +30,7 @@ public class InventoryController : MonoBehaviour
                     Pickup(closestInteractable.pickupObject);
                 }
                 if (closestInteractable.destroyOnInteract)
-                    Destroy(closestInteractable);
+                    Destroy(closestInteractable.gameObject);
             }
         }
         else
@@ -66,6 +66,10 @@ public class InventoryController : MonoBehaviour
                 inventory.Camps += (int)pickup.Quantity;
                 inventory.Camps = Mathf.Clamp(inventory.Camps, 0, inventory.CampsMax);
                 break;
+            case PickupObject.TYPE.FOOD:
+                inventory.Food += pickup.Quantity;
+                inventory.Food = Mathf.Clamp(inventory.Food, 0, inventory.FoodMax);
+                break;
             case PickupObject.TYPE.WATER:
                 inventory.Water += pickup.Quantity;
                 inventory.Water = Mathf.Clamp(inventory.Water, 0, inventory.WaterMax);
@@ -81,6 +85,14 @@ public class InventoryController : MonoBehaviour
             default:
                 break;
         }
+    }
+    public void CraftBandaids()
+    {
+        Craft(PickupObject.TYPE.BANDAIDS);
+    }
+    public void CraftCamps()
+    {
+        Craft(PickupObject.TYPE.CAMP);
     }
     public bool Craft(PickupObject.TYPE type)
     {
@@ -118,5 +130,29 @@ public class InventoryController : MonoBehaviour
         inventory.Oil = Mathf.Clamp(inventory.Oil, 0, inventory.OilMax);
         inventory.lampGas = Mathf.Clamp01(inventory.lampGas);
 
+    }
+    public void Eat()
+    {
+        if (playerController.Hunger >= 1)
+            return;
+        inventory.Food -= 1;
+        playerController.HungerSaturation += 1;
+        inventory.Food = Mathf.Clamp(inventory.Food, 0, inventory.FoodMax);
+    }
+    public void Drink()
+    {
+        if (playerController.Thirst >= 1)
+            return;
+        inventory.Water -= 1;
+        playerController.ThirstSaturation += 1;
+        inventory.Water = Mathf.Clamp(inventory.Water, 0, inventory.WaterMax);
+    }
+    public void Heal()
+    {
+        if (playerController.Life >= (float)playerController.LifeDivisions)
+            return;
+        inventory.Bandaids -= 1;
+        playerController.Life += 2;
+        inventory.Bandaids = Mathf.Clamp(inventory.Bandaids, 0 , inventory.BandaidsMax);
     }
 }

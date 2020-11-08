@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DeformableTerrainController : MonoBehaviour
 {
@@ -33,6 +34,8 @@ public class DeformableTerrainController : MonoBehaviour
     public Camera cam;
     public RenderTexture rtex;
     public RenderTexture tex;
+    public bool AutoLoad = true;
+    public bool AutoSave = true;
     public Texture2D ttex;
     //[Range(0, 10)]
     //public int Detail_BlurRadius = 1;
@@ -51,7 +54,7 @@ public class DeformableTerrainController : MonoBehaviour
     public string depthHeightName = "_Deformable_Main_Height";
     float updateAccum;
 
-    public void Awake()
+    void Awake()
     {
         manager = FindObjectOfType<DeformableTerrainManager>();
         priorityIndex = manager.terrains.Count;
@@ -155,7 +158,14 @@ public class DeformableTerrainController : MonoBehaviour
         tex.autoGenerateMips = false;
         tex.enableRandomWrite = true;
         tex.Create();
-        ttex = new Texture2D(CameraResolutionMult.x * CameraResolutionBase, CameraResolutionMult.y * CameraResolutionBase, TextureFormat.ARGB32, false);
+            LoadTexture();
+        if (ttex || AutoLoad)
+        {
+        }
+        else
+        {
+            ttex = new Texture2D(CameraResolutionMult.x * CameraResolutionBase, CameraResolutionMult.y * CameraResolutionBase, TextureFormat.ARGB32, false);
+        }
         cam.clearFlags = CameraClearFlags.Color;
         cam.backgroundColor = Color.black;
         cam.cameraType = CameraType.SceneView;
@@ -171,11 +181,11 @@ public class DeformableTerrainController : MonoBehaviour
         rend.material.SetTexture(depthTexName, tex);
         rend.material.SetFloat(depthHeightName, OffsetDepth.y);
         rend.material.SetVector(depthResName, new Vector4(CameraResolutionMult.x * CameraResolutionBase, CameraResolutionMult.y * CameraResolutionBase, 0, 0));
-        computeAccumulate.SetVector("ColorLerp", new Vector4(0,0,0,0));
+        computeAccumulate.SetVector("ColorLerp", new Vector4(0, 0, 0, 0));
         UpdateTexture();
     }
 
-    private void Update()
+    void Update()
     {
         try { updateAccum += Time.deltaTime * GameManager.Instance.atmosphericsController.Rain * SnowAccum; } catch { }
         if (EnableUpdate)
@@ -317,6 +327,60 @@ public class DeformableTerrainController : MonoBehaviour
         {
             return 10000f;
         }
+    }
+
+    void OnDestroy()
+    {
+        if (AutoSave)
+        {
+            UpdateTexture();
+            SaveTexture();
+        }
+    }
+
+    public void SaveTexture()
+    {
+        try
+        {
+            System.IO.Directory.CreateDirectory(Application.persistentDataPath + "/" + SceneManager.GetActiveScene().name);
+
+            byte[] bytes = ttex.EncodeToPNG();
+
+            System.IO.File.WriteAllBytes(Application.persistentDataPath + "/" + SceneManager.GetActiveScene().name + "/" + priorityIndex + ".png", bytes);
+        }
+        catch { }
+    }
+    public void LoadTexture()
+    {
+        Debug.Log(Application.persistentDataPath);
+        if (AutoLoad)
+        {
+            if (!ttex)
+                ttex = new Texture2D(CameraResolutionMult.x * CameraResolutionBase, CameraResolutionMult.y * CameraResolutionBase, TextureFormat.ARGB32, false);
+            try
+            {
+                if (System.IO.File.Exists(Application.persistentDataPath + "/" + SceneManager.GetActiveScene().name + "/" + priorityIndex + ".png"))
+                {
+
+                    byte[] bytes = System.IO.File.ReadAllBytes(Application.persistentDataPath + "/" + SceneManager.GetActiveScene().name + "/" + priorityIndex + ".png");
+                    ttex = new Texture2D(1, 1);
+                    ttex.LoadImage(bytes);
+                    ttex.Apply();
+                }
+            }
+            catch { }
+        }
+        else if (!ttex)
+        {
+            ttex = new Texture2D(CameraResolutionMult.x * CameraResolutionBase, CameraResolutionMult.y * CameraResolutionBase, TextureFormat.ARGB32, false);
+        }
+        RenderTexture lastActive = RenderTexture.active;
+        RenderTexture.active = tex;
+        // Copy your texture ref to the render texture
+        Graphics.Blit(ttex, tex);
+        RenderTexture.active = lastActive;
+        ttex = new Texture2D(CameraResolutionMult.x * CameraResolutionBase, CameraResolutionMult.y * CameraResolutionBase, TextureFormat.ARGB32, false);
+        UpdateTexture();
     }
 
     //private void OnDrawGizmos()

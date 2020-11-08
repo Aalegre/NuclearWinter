@@ -67,7 +67,7 @@ public class AtmosphericsController : MonoBehaviour
     [Range(0, 1)] public float Rain;
     public Vector2 rainNextProbability = new Vector2(1, 3);
     public Vector2 rainProbability = new Vector2(-1, 3);
-    float rainNext = -100;
+    public float rainNext = -100;
     public float rainFadeSpeed = 1;
     float rainFade = 0;
     public ParticleSystem rainParticles;
@@ -77,7 +77,7 @@ public class AtmosphericsController : MonoBehaviour
     [Range(0, 1)] public float Fog;
     public Vector2 fogNextProbability = new Vector2(1, 3);
     public Vector2 fogProbability = new Vector2(-1, 3);
-    float fogNext = -100;
+    public float fogNext = -100;
     public float fogFadeSpeed = 1;
     float fogFade = 0;
     void Awake()
@@ -96,8 +96,8 @@ public class AtmosphericsController : MonoBehaviour
             Generate3dNoise();
         rainParticlesEmission = rainParticles.emission;
         UpdateWeather();
-        Rain = rainFade;
-        Fog = fogFade;
+        rainFade = Rain;
+        fogFade = Fog;
     }
 
     public void Generate3dNoise()

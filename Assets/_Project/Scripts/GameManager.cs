@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,13 +17,21 @@ public class GameManager : MonoBehaviour
     public Vector2 resolutionHalfF;
     public int resolutionMin;
     public float resolutionMinF;
+    public bool Paused = false;
 
     private void Awake()
     {
         if(Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this);
+            if (SceneManager.GetActiveScene().buildIndex < 1)
+            {
+                Paused = true;
+            }
+            else
+            {
+                DontDestroyOnLoad(this);
+            }
         }
         else
         {

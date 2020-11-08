@@ -8,11 +8,30 @@ public class InputManager : MonoBehaviour
     public class Action
     {
         public InputAction.CallbackContext ctx;
+        public virtual bool Update(InputAction.CallbackContext context)
+        {
+            ctx = context;
+            return context.canceled;
+        }
     }
     [System.Serializable]
     public class Axis : Action
     {
         public Vector2 axis;
+        public override bool Update(InputAction.CallbackContext context)
+        {
+            base.Update(context);
+            axis = context.ReadValue<Vector2>();
+            if (context.canceled)
+            {
+                axis = Vector2.zero;
+            }
+            else
+            {
+
+            }
+            return context.canceled;
+        }
     }
     [System.Serializable]
     public class Button : Action
@@ -22,9 +41,9 @@ public class InputManager : MonoBehaviour
         public bool ButtonDown() { return !waspressed && pressed; }
         public bool ButtonPressed() { return pressed; }
         public bool ButtonUp() { return waspressed && !pressed; }
-        public bool Update(InputAction.CallbackContext context)
+        public override bool Update(InputAction.CallbackContext context)
         {
-            ctx = context;
+            base.Update(context);
             if (context.started)
             {
                 pressed = true;
@@ -44,6 +63,7 @@ public class InputManager : MonoBehaviour
 
     static public InputManager Instance;
     public PlayerInput playerInput;
+    public enum MAP { Player, UI};
     public enum SCHEME { KEYBOARD, CONTROLLER, PLAYSTATION};
     public string[] SCHEMENAME = { "KeyboardMouse", "Controller", "PlayStation" };
     public SCHEME currentController;
@@ -55,13 +75,14 @@ public class InputManager : MonoBehaviour
     public Button Weapon;
     public Button Torch;
     public Button Pause;
+    public Button Cancel;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this);
+            //DontDestroyOnLoad(this);
         }
         else
         {
@@ -102,8 +123,7 @@ public class InputManager : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         UpdateScheme();
-        Move.ctx = context;
-        Move.axis = context.ReadValue<Vector2>();
+        Move.Update(context);
     }
     public void OnLook(InputAction.CallbackContext context)
     {
@@ -121,8 +141,7 @@ public class InputManager : MonoBehaviour
         }
         else
         {
-            Look.ctx = context;
-            Look.axis = context.ReadValue<Vector2>();
+            Look.Update(context);
         }
     }
     public void OnFire(InputAction.CallbackContext context)
@@ -154,6 +173,17 @@ public class InputManager : MonoBehaviour
         UpdateScheme();
         if (Pause.Update(context)) 
             StartCoroutine(ButtonCancelled(Pause));
+    }
+    public void OnCancel(InputAction.CallbackContext context)
+    {
+        UpdateScheme();
+        if (Cancel.Update(context)) 
+            StartCoroutine(ButtonCancelled(Cancel));
+    }
+
+    public void ChangeMap(MAP map)
+    {
+        playerInput.SwitchCurrentActionMap(map.ToString());
     }
 
     public void UpdateScheme()

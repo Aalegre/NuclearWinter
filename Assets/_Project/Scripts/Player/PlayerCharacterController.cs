@@ -198,6 +198,7 @@ public class PlayerCharacterController : ThirdPersonCharacter
 		GunParticles.Emit(50);
 		cape.externalAcceleration += GunBoquilla.forward * -windStrength;
 		cape.randomAcceleration += GunBoquilla.forward * -windStrength;
+		playerController.cameraController.KnockBack(new Vector2(GunBoquilla.forward.x, GunBoquilla.forward.z) * 0.25f);
 		StartCoroutine(InputManager.Instance.Feedback_Coroutine(1, 0, .4f, 1, 0, .5f));
 	}
 

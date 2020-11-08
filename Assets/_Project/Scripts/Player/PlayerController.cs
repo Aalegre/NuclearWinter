@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     public float TemperatureMinBase = -5;
     public float TemperatureMinScale = 0.25f;
     public float TemperatureDamage = 0;
+    public float TemperatureDamageLifeScale = 1;
     [Range(0, 5)] public float ShootDelay = 0.5f;
     float ShootTimer = 0;
     [Range(0, .1f)] public float TorchDecay = 0.05f;
@@ -61,6 +62,18 @@ public class PlayerController : MonoBehaviour
 
     void Inputs()
     {
+        if (InputManager.Instance.Pause.ButtonDown())
+        {
+            GameManager.Instance.Paused = !GameManager.Instance.Paused;
+            if (GameManager.Instance.Paused)
+            {
+                InputManager.Instance.ChangeMap(InputManager.MAP.UI);
+            }
+            else
+            {
+                InputManager.Instance.ChangeMap(InputManager.MAP.Player);
+            }
+        }
         // read inputs
         if (MoveAxis.magnitude > .5f)
         {
@@ -89,10 +102,15 @@ public class PlayerController : MonoBehaviour
         playerCharacterController.Move(move, false, false);
         if (InputManager.Instance.Look.axis.magnitude > AimMinRadius)
         {
-            AimDirection = new Vector3(InputManager.Instance.Look.axis.x, 0, InputManager.Instance.Look.axis.y) * AimRadius;
+            Vector2 aim = InputManager.Instance.Look.axis;
+            if (InputManager.Instance.currentController != InputManager.SCHEME.KEYBOARD)
+            {
+                aim.Normalize();
+            }
+            AimDirection = new Vector3(aim.x, 0, aim.y) * AimRadius;
             AimDirection.y = AimHeight;
-            AimPosition = playerCharacterController.root.position + AimDirection;
         }
+        AimPosition = playerCharacterController.root.position + AimDirection;
         if (playerCharacterController.Gun)
         {
             ShootTimer += Time.deltaTime;
@@ -155,6 +173,10 @@ public class PlayerController : MonoBehaviour
             {
                 HungerSaturation -= Time.deltaTime * HungerLostSpeed * modifier;
                 ThirstSaturation -= Time.deltaTime * ThirstLostSpeed;
+                if(TemperatureDamage < -1)
+                {
+                    Life -= Mathf.LerpUnclamped(0, Time.deltaTime * TemperatureDamageLifeScale, Mathf.Max(Mathf.Abs(TemperatureDamage + 1), 0));
+                }
                 //Debug.Log(modifier + " : " + HungerLostSpeed * modifier);
             }
             else

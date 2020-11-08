@@ -18,6 +18,7 @@ public class CameraController : MonoBehaviour
     public Vector3 gameplayDirectionDown;
     public Vector3 gameplayDirectionLeft;
     public Vector3 gameplayDirectionRight;
+    public Vector2 AdditiveEffect;
     public Camera cam;
     public float moveSpeed = 1;
     public Vector2Int resolution;
@@ -40,7 +41,8 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        moveAxis = Vector2.Lerp(moveAxis, pc.MoveAxis, Time.deltaTime * moveSpeed);
+        AdditiveEffect = Vector2.Lerp(AdditiveEffect, Vector2.zero, Time.deltaTime * 10);
+        moveAxis = Vector2.Lerp(moveAxis, pc.MoveAxis, Time.deltaTime * moveSpeed) + AdditiveEffect;
         Vector3 desiredDirection = gameplayDirection;
         desiredDirection = Vector3.Lerp(desiredDirection, gameplayDirectionUp, moveAxis.y);
         desiredDirection = Vector3.Lerp(desiredDirection, gameplayDirectionDown, -moveAxis.y);
@@ -48,6 +50,11 @@ public class CameraController : MonoBehaviour
         desiredDirection = Vector3.Lerp(desiredDirection, gameplayDirectionLeft, -moveAxis.x);
         cam.transform.position = Vector3.Lerp(cam.transform.position, pcc.transform.position + gameplayOffset, Time.deltaTime * PosSpeed);
         cam.transform.localRotation = Quaternion.Euler(desiredDirection);
+    }
+
+    public void KnockBack(Vector2 direction)
+    {
+        AdditiveEffect += direction;
     }
 
     public void UpdateResolution()

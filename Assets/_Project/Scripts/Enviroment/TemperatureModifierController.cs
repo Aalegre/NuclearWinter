@@ -19,6 +19,12 @@ public class TemperatureModifierController : MonoBehaviour
     ParticleSystem.EmissionModule activeParticleSystemEmission;
     public GameObject[] activeObjects;
     public GameObject[] notactiveObjects;
+    public Transform GrowOnEnabled;
+    public Vector3 GrowMax = new Vector3(5,5,5);
+    public Vector3 GrowMin = new Vector3(0.1f, 0.1f, 0.1f);
+    public float GrowSpeedActive = 0.1f;
+    public float GrowSpeedNotActive = 1;
+    float GrowSpeedCount = 0;
     void Start()
     {
         if (!atmosphericsController)
@@ -27,6 +33,11 @@ public class TemperatureModifierController : MonoBehaviour
         if (activeParticleSystem)
             activeParticleSystemEmission = activeParticleSystem.emission;
         activelast = active;
+        TemperatureInner = 0;
+        if (active)
+            TemperatureInner = Temperature;
+        if (GrowOnEnabled)
+            GrowOnEnabled.localScale = GrowMin;
         UpdateVisuals();
     }
     private void Update()
@@ -43,6 +54,23 @@ public class TemperatureModifierController : MonoBehaviour
         else
         {
             TemperatureInner = Mathf.Lerp(TemperatureInner, 0, Time.deltaTime * TemperatureDecayNotActive);
+        }
+        if (GrowOnEnabled)
+        {
+            if (active)
+            {
+                GrowSpeedCount = Mathf.Lerp(GrowSpeedCount, TemperatureInner / Temperature, GrowSpeedActive);
+            }
+            else
+            {
+                GrowSpeedCount = Mathf.Lerp(GrowSpeedCount, TemperatureInner / Temperature, GrowSpeedNotActive);
+            }
+            if (GrowSpeedCount == float.NaN) GrowSpeedCount = 0;
+            try
+            {
+                GrowOnEnabled.localScale = Vector3.Lerp(GrowMin, GrowMax, GrowSpeedCount);
+            }
+            catch { }
         }
     }
 

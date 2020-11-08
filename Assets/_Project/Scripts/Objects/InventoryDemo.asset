@@ -14,21 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Bullets: 16
   BulletsMax: 32
-  Textiles: 0
+  Textiles: 8
   TextilesMax: 16
-  Bottles: 0
+  Bottles: 3
   BottlesMax: 4
-  Woods: 0
+  Woods: 3
   WoodsMax: 4
-  Bandaids: 0
+  Bandaids: 1
   BandaidsMax: 4
   Camps: 0
   CampsMax: 1
-  Water: 0
+  Food: 1
+  FoodMax: 5
+  Water: 1
   WaterMax: 5
-  Alcohol: 0
+  Alcohol: 1
   AlcoholMax: 2
-  Oil: 0
+  Oil: 1
   OilMax: 2
   lampGas: 0.5
   lampGasMax: 1

@@ -17,6 +17,8 @@ public class Inventory : ScriptableObject
     public int BandaidsMax = 4;
     public int Camps;
     public int CampsMax = 1;
+    public float Food;
+    public float FoodMax = 5;
     public float Water;
     public float WaterMax = 5;
     public float Alcohol;
